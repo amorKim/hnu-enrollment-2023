@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hnu_mis_announcement/views/constants/route.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -24,9 +25,8 @@ class _LoginPageState extends State<LoginPage> {
                 width: 150,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage('assets/hnu_logo.png'),
+                    image: AssetImage('assets/hnu_logo.png'),
                   ),
-
                 ),
               ),
               const SizedBox(height: 25),
@@ -39,8 +39,7 @@ class _LoginPageState extends State<LoginPage> {
                         color: Colors.green,
                         fontWeight: FontWeight.w500,
                         fontSize: 30),
-                  )
-              ),
+                  )),
               const SizedBox(height: 10),
               Container(
                   alignment: Alignment.center,
@@ -66,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                   controller: passwordController,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: 'Password',
+                    labelText: 'Passworssd',
                   ),
                 ),
               ),
@@ -74,18 +73,19 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: () {
                   //forgot password screen
                 },
-                child: const Text('Forgot Password',),
+                child: const Text(
+                  'Forgot Password',
+                ),
               ),
               Container(
                   height: 50,
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: ElevatedButton(
-                    child: const Text('Login'),
+                    child: const Text('Logissdasdn'),
                     onPressed: () {
                       Navigator.pushNamed(context, '/second');
                     },
-                  )
-              ),
+                  )),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -96,7 +96,10 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(fontSize: 20),
                     ),
                     onPressed: () {
-                      //signup screen
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                        registerRoute,
+                        (route) => false,
+                      );
                     },
                   )
                 ],
