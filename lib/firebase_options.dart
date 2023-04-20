@@ -23,7 +23,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -47,33 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAarZnBAEBH0ab5Cd6bt1ICcDjUKfWdym0',
-    appId: '1:124724628822:web:b3d1cab16d3e3eac021af7',
-    messagingSenderId: '124724628822',
-    projectId: 'se102-64409',
-    authDomain: 'se102-64409.firebaseapp.com',
-    databaseURL: 'https://se102-64409-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'se102-64409.appspot.com',
-    measurementId: 'G-9NWKB30GC8',
+    apiKey: 'AIzaSyDUAuRP8OryolLhDJhUvepf1zJ22kG_quo',
+    appId: '1:464086873108:web:2645456b350ee159986301',
+    messagingSenderId: '464086873108',
+    projectId: 'enrollment-flutter',
+    authDomain: 'enrollment-flutter.firebaseapp.com',
+    storageBucket: 'enrollment-flutter.appspot.com',
+    measurementId: 'G-H2S32Q535W',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAhsm2HL6bybDKF7nQul5TpRKh9wMUlN0Q',
-    appId: '1:124724628822:android:dcd8f33dde57c997021af7',
-    messagingSenderId: '124724628822',
-    projectId: 'se102-64409',
-    databaseURL: 'https://se102-64409-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'se102-64409.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyB5Evga0m754hS7tGeRpwi3DruRrS0e2Pg',
-    appId: '1:124724628822:ios:07c520651de434ec021af7',
-    messagingSenderId: '124724628822',
-    projectId: 'se102-64409',
-    databaseURL: 'https://se102-64409-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'se102-64409.appspot.com',
-    iosClientId: '124724628822-iqvcakgi7n5cc8n0qu25svqcth7s51op.apps.googleusercontent.com',
-    iosBundleId: 'com.example.hnuMisAnnouncement',
+    apiKey: 'AIzaSyB4PwsFXNybT8wiG_l2yGfl92qpNdzN1XE',
+    appId: '1:464086873108:android:cfc43a1fe2ab1240986301',
+    messagingSenderId: '464086873108',
+    projectId: 'enrollment-flutter',
+    storageBucket: 'enrollment-flutter.appspot.com',
   );
 }

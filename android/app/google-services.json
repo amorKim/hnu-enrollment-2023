@@ -1,41 +1,40 @@
 {
   "project_info": {
-    "project_number": "124724628822",
-    "firebase_url": "https://se102-64409-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "project_id": "se102-64409",
-    "storage_bucket": "se102-64409.appspot.com"
+    "project_number": "464086873108",
+    "project_id": "enrollment-flutter",
+    "storage_bucket": "enrollment-flutter.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:124724628822:android:dcd8f33dde57c997021af7",
+        "mobilesdk_app_id": "1:464086873108:android:cfc43a1fe2ab1240986301",
         "android_client_info": {
           "package_name": "com.example.hnu_mis_announcement"
         }
       },
       "oauth_client": [
         {
-          "client_id": "124724628822-31egsvgo78ief9vtjuoilndtct0c40n9.apps.googleusercontent.com",
+          "client_id": "464086873108-7g2tf05hotjhdrf2cd5f9r2trpt56fpt.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAhsm2HL6bybDKF7nQul5TpRKh9wMUlN0Q"
+          "current_key": "AIzaSyB4PwsFXNybT8wiG_l2yGfl92qpNdzN1XE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "124724628822-31egsvgo78ief9vtjuoilndtct0c40n9.apps.googleusercontent.com",
+              "client_id": "464086873108-7g2tf05hotjhdrf2cd5f9r2trpt56fpt.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "124724628822-iqvcakgi7n5cc8n0qu25svqcth7s51op.apps.googleusercontent.com",
+              "client_id": "464086873108-bi52rm04s5nnighu9g0tpkfu8gcmjp9l.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.hnuMisAnnouncement"
+                "bundle_id": "com.example.enrollmentFlutter"
               }
             }
           ]

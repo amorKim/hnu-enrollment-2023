@@ -3,10 +3,18 @@ import 'package:hnu_mis_announcement/drawer/drawerItem.dart';
 import 'package:hnu_mis_announcement/drawer/myinfomation.dart';
 import 'package:hnu_mis_announcement/drawer/updateAddress.dart';
 import 'package:hnu_mis_announcement/drawer/updateContactNum.dart';
+import 'package:hnu_mis_announcement/services/auth/auth_service.dart';
+import 'package:hnu_mis_announcement/utilities/dialogs/logot_dialog.dart';
+import 'package:hnu_mis_announcement/views/constants/route.dart';
 
-class MyDrawer extends StatelessWidget {
+class MyDrawer extends StatefulWidget {
   const MyDrawer({Key? key}) : super(key: key);
 
+  @override
+  State<MyDrawer> createState() => _MyDrawerState();
+}
+
+class _MyDrawerState extends State<MyDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -17,33 +25,63 @@ class MyDrawer extends StatelessWidget {
           child: Column(
             children: [
               headerWidget(),
-              const SizedBox(height: 30,),
-              const Divider(thickness: 1, height: 15, color: Colors.grey,),
-              const SizedBox(height: 15,),
-              DrawerItems(
-                  name: 'My Information',
-                  icon: Icons.article_outlined,
-                onPressed: ()=> onItemPressed(context, index: 0),
+              const SizedBox(
+                height: 30,
               ),
-              const SizedBox(height: 10,),
+              const Divider(
+                thickness: 1,
+                height: 15,
+                color: Colors.grey,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              DrawerItems(
+                name: 'My Information',
+                icon: Icons.article_outlined,
+                onPressed: () => onItemPressed(context, index: 0),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
               DrawerItems(
                 name: 'Update Address',
                 icon: Icons.location_city,
-                onPressed: ()=> onItemPressed(context, index: 1),
+                onPressed: () => onItemPressed(context, index: 1),
               ),
-              const SizedBox(height: 10,),
+              const SizedBox(
+                height: 10,
+              ),
               DrawerItems(
                 name: 'Update Contact Number',
                 icon: Icons.contact_phone_outlined,
-                onPressed: ()=> onItemPressed(context, index: 2),
+                onPressed: () => onItemPressed(context, index: 2),
               ),
-              const SizedBox(height: 20,),
-              const Divider(thickness: 1, height: 15, color: Colors.grey,),
-              const SizedBox(height: 15,),
+              const SizedBox(
+                height: 20,
+              ),
+              const Divider(
+                thickness: 1,
+                height: 15,
+                color: Colors.grey,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
               DrawerItems(
                 name: 'Log Out',
                 icon: Icons.logout,
-                onPressed: ()=> onItemPressed(context, index: 3),
+                onPressed: () async {
+                  final shouldLogout = await showLogOutDialog(context);
+                  if (shouldLogout) {
+                    await AuthService.firebase().logout();
+                    if (!mounted) return;
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      loginRoute,
+                      (_) => false,
+                    );
+                  }
+                },
               ),
             ],
           ),
@@ -51,41 +89,61 @@ class MyDrawer extends StatelessWidget {
       ),
     );
   }
-  void onItemPressed(BuildContext context, {required int index}){
+
+  void onItemPressed(BuildContext context, {required int index}) {
     Navigator.pop(context);
 
-    switch(index){
+    switch (index) {
       case 0:
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const My_Info()));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => const My_Info()));
         break;
       case 1:
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const UpdateAddress()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const UpdateAddress()));
         break;
       case 2:
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const UpdateContactNum()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const UpdateContactNum()));
         break;
     }
   }
-  Widget headerWidget(){
+
+  Widget headerWidget() {
     const img = 'assets/Kimberly Amor.jpg';
     return Column(
-
-      children:  [
+      children: [
         const CircleAvatar(
           radius: 40,
-            backgroundImage: AssetImage(img),
+          backgroundImage: AssetImage(img),
         ),
-        const SizedBox(width: 20,),
+        const SizedBox(
+          width: 20,
+        ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: const [
-            SizedBox(height: 10,),
-
-            Text('Kimberly Amor', style: TextStyle(fontSize: 16, color: Colors.black),),
-            SizedBox(height: 10,),
-            Text('amor.kimberly@hnu.edu.ph', style: TextStyle(fontSize: 16, color: Colors.black),),
-            SizedBox(height: 10,),
-            Text('Roman Catholic', style: TextStyle(fontSize: 16, color: Colors.black),)
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              'Kimberly Amor',
+              style: TextStyle(fontSize: 16, color: Colors.black),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              'amor.kimberly@hnu.edu.ph',
+              style: TextStyle(fontSize: 16, color: Colors.black),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              'Roman Catholic',
+              style: TextStyle(fontSize: 16, color: Colors.black),
+            )
           ],
         )
       ],
