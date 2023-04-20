@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-import '../main.dart';
-
+import '../../main.dart';
 
 class FinancialsPage extends StatefulWidget {
   const FinancialsPage({Key? key}) : super(key: key);
-
 
   @override
   State<FinancialsPage> createState() => _FinancialsPageState();
@@ -26,14 +24,15 @@ class _FinancialsPageState extends State<FinancialsPage> {
 
   @override
   Widget build(BuildContext context) {
-    int totalLoadUnits = persons.map((p) => p.loadunits).reduce((a, b) => a + b);
+    int totalLoadUnits =
+        persons.map((p) => p.loadunits).reduce((a, b) => a + b);
     int totalPayUnits = persons.map((p) => p.payunits).reduce((a, b) => a + b);
     double totalAmount = persons.map((p) => p.total).reduce((a, b) => a + b);
 
-
     List<Financial> filteredPersons =
-    persons.where((p) => p.payunits == 5).toList();
-    double totalAssessment = totalAmount + filteredPersons.length * 2310.66 + 6277.25;
+        persons.where((p) => p.payunits == 5).toList();
+    double totalAssessment =
+        totalAmount + filteredPersons.length * 2310.66 + 6277.25;
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -51,33 +50,41 @@ class _FinancialsPageState extends State<FinancialsPage> {
                 ],
                 rows: [
                   ...persons.map((person) => DataRow(cells: [
-                    DataCell(Text(person.course)),
-                    DataCell(Text('${person.loadunits}')),
-                    DataCell(Text('${person.payunits}')),
-                    DataCell(Text('₱${person.total.toStringAsFixed(2)}')),
-                  ])),
+                        DataCell(Text(person.course)),
+                        DataCell(Text('${person.loadunits}')),
+                        DataCell(Text('${person.payunits}')),
+                        DataCell(Text('₱${person.total.toStringAsFixed(2)}')),
+                      ])),
                   DataRow(cells: [
                     const DataCell(Text(
-                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),'Total Tuition:')),
+                        style: TextStyle(
+                            fontSize: 13, fontWeight: FontWeight.bold),
+                        'Total Tuition:')),
                     DataCell(Text(totalLoadUnits.toString())),
                     DataCell(Text(totalPayUnits.toString())),
-                    DataCell(Text('₱${totalAmount.toStringAsFixed(2)}',style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                    DataCell(Text(
+                      '₱${totalAmount.toStringAsFixed(2)}',
+                      style: const TextStyle(
+                          fontSize: 13, fontWeight: FontWeight.bold),
                     )),
                   ]),
                   DataRow(cells: [
                     const DataCell(Text(
                       'TOTAL ASSESSMENT:',
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     )),
                     const DataCell(Text('')),
                     const DataCell(Text('')),
-                    DataCell(Text('₱${totalAssessment.toStringAsFixed(2)}',
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    DataCell(Text(
+                      '₱${totalAssessment.toStringAsFixed(2)}',
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
                     )),
                   ]),
-
                 ],
-              ),const SizedBox(height: 20),
+              ),
+              const SizedBox(height: 20),
               DataTable(
                 columns: const [
                   DataColumn(label: Text('Course')),
@@ -85,20 +92,23 @@ class _FinancialsPageState extends State<FinancialsPage> {
                 ],
                 rows: [
                   ...filteredPersons.map((person) => DataRow(cells: [
-                    DataCell(Text(person.course)),
-                    const DataCell(Text("₱2310.66")),
-                  ])),
+                        DataCell(Text(person.course)),
+                        const DataCell(Text("₱2310.66")),
+                      ])),
                   DataRow(cells: [
                     const DataCell(Text(
-                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 13, fontWeight: FontWeight.bold),
                         'Total lab fee:')),
                     DataCell(Text(
-                      '₱${(filteredPersons.length * 2310.66).toStringAsFixed(2)}',style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                      '₱${(filteredPersons.length * 2310.66).toStringAsFixed(2)}',
+                      style: const TextStyle(
+                          fontSize: 13, fontWeight: FontWeight.bold),
                     )),
                   ]),
-
                 ],
-              ),const SizedBox(height: 20),
+              ),
+              const SizedBox(height: 20),
               DataTable(
                 columns: const [
                   DataColumn(label: Text('Miscellaneous and Other Fees')),
@@ -130,7 +140,8 @@ class _FinancialsPageState extends State<FinancialsPage> {
                     DataCell(Text('₱150.88')),
                   ]),
                   DataRow(cells: [
-                    DataCell(Text('Community Extension Services/Corporate Social Responsibility (CES/CSR)')),
+                    DataCell(Text(
+                        'Community Extension Services/Corporate Social Responsibility (CES/CSR)')),
                     DataCell(Text('₱59.40')),
                   ]),
                   DataRow(cells: [
@@ -171,8 +182,3 @@ class _FinancialsPageState extends State<FinancialsPage> {
     );
   }
 }
-
-
-
-
-

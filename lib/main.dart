@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hnu_mis_announcement/academics/academics.dart';
+import 'package:hnu_mis_announcement/views/academics/academics.dart';
 import 'package:hnu_mis_announcement/drawer/drawer.dart';
-import 'package:hnu_mis_announcement/financials/financials.dart';
-import 'package:hnu_mis_announcement/homepage/homepage.dart';
-import 'package:hnu_mis_announcement/login_page.dart';
+import 'package:hnu_mis_announcement/views/financials/financials.dart';
+import 'package:hnu_mis_announcement/views/homepage/homepage.dart';
+import 'package:hnu_mis_announcement/views/login_page.dart';
 import 'package:hnu_mis_announcement/services/auth/auth_service.dart';
 import 'package:hnu_mis_announcement/views/constants/route.dart';
 import 'package:hnu_mis_announcement/views/register_view.dart';
@@ -21,8 +21,9 @@ void main() {
       home: const LandingPage(),
       routes: {
         loginRoute: (context) => const LoginPage(),
-        '/second': (context) => const DashboardPage(),
+        dashboardRoute: (context) => const DashboardPage(),
         registerRoute: (context) => const RegisterView(),
+        verifyEmailRoute: (context) => const VerifyEmailView(),
       },
     ),
   );
@@ -67,7 +68,7 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   int _currentIndex = 0;
   final List<Widget> _children = [
-    const LandingPage(),
+    const HomePage(),
     const FinancialsPage(),
     const AcademicsPage(),
   ];

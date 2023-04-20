@@ -28,6 +28,7 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   void initState() {
+    _studentService = FirebaseCloudStorage();
     _email = TextEditingController();
     _password = TextEditingController();
     _firstName = TextEditingController();
@@ -172,42 +173,11 @@ class _RegisterViewState extends State<RegisterView> {
                     program: program,
                     fName: firstname,
                     lName: lastname,
+                    mName: middlename,
                     dBirth: dateBirth!,
                     address: address,
                     contactNum: contactNum,
                   );
-
-                  // Register student account
-                  // final student = Student(
-                  //     userId: userId,
-                  //     studId: studId,
-                  //     program: program,
-                  //     fName: fName,
-                  //     lName: lName,
-                  //     mName: ,
-                  //     dBirth: dBirth,
-                  //     address: address,
-                  //     contactNum: contactNum);
-
-                  // final student = Student(
-                  //   userId: user.uid,
-                  //   program: _program.text,
-                  //   firstName: _firstName.text,
-                  //   lastName: _lastName.text,
-                  //   middleName: _middleName.text,
-                  //   dateOfBirth: _dateOfBirth.text,
-                  //   email: _email.text,
-                  //   address: _address.text,
-                  //   contactNumber: _contactNumber.text,
-                  //   unitsTaken: int.tryParse(_unitsTaken.text) ?? null,
-                  //   maxUnit: int.tryParse(_maxUnit.text) ?? null,
-                  //   enrollments: [],
-                  //   assessment: Assessment(
-                  //     misc: int.tryParse(_misc.text) ?? null,
-                  //     totalTuitionFees: int.tryParse(_totalTuitionFees.text) ?? null,
-                  //   ),
-                  // );
-                  // await StudentService().createStudent(student);
 
                   // Send email verification
                   AuthService.firebase().sendEmailVerification();
@@ -234,12 +204,19 @@ class _RegisterViewState extends State<RegisterView> {
                     context,
                     'Failed to register',
                   );
-                } catch (e) {
-                  print(e);
                 }
               },
               child: const Text('Register'),
             ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  loginRoute,
+                  (route) => false,
+                );
+              },
+              child: const Text('Already registered? Login here!'),
+            )
           ],
         ),
       ),

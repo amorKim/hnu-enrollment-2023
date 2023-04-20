@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hnu_mis_announcement/services/auth/auth_exceptions.dart';
+import 'package:hnu_mis_announcement/services/auth/auth_service.dart';
+import 'package:hnu_mis_announcement/utilities/dialogs/error_dialog.dart';
 import 'package:hnu_mis_announcement/views/constants/route.dart';
 
 class LoginPage extends StatefulWidget {
@@ -9,8 +12,22 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController nameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  late final TextEditingController _email;
+  late final TextEditingController _password;
+
+  @override
+  void initState() {
+    _email = TextEditingController();
+    _password = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _email.dispose();
+    _password.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,10 +68,10 @@ class _LoginPageState extends State<LoginPage> {
               Container(
                 padding: const EdgeInsets.all(10),
                 child: TextField(
-                  controller: nameController,
+                  controller: _email,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: 'ID number',
+                    labelText: 'Email',
                   ),
                 ),
               ),
@@ -62,10 +79,10 @@ class _LoginPageState extends State<LoginPage> {
                 padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                 child: TextField(
                   obscureText: true,
-                  controller: passwordController,
+                  controller: _password,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: 'Passworssd',
+                    labelText: 'Password',
                   ),
                 ),
               ),
@@ -81,9 +98,48 @@ class _LoginPageState extends State<LoginPage> {
                   height: 50,
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: ElevatedButton(
-                    child: const Text('Logissdasdn'),
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/second');
+                    child: const Text('Login'),
+                    onPressed: () async {
+                      final email = _email.text;
+                      final password = _password.text;
+                      try {
+                        await AuthService.firebase().logIn(
+                          email: email,
+                          password: password,
+                        );
+
+                        final user = AuthService.firebase().currentUser;
+                        if (user?.isEmailVerified ?? false) {
+                          // user's email is verified
+                          if (!mounted) return;
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                            dashboardRoute,
+                            (route) => false,
+                          );
+                        } else {
+                          // user's email is NOT verified
+                          if (!mounted) return;
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                            verifyEmailRoute,
+                            (route) => false,
+                          );
+                        }
+                      } on UserNotFoundAuthException {
+                        await showErrorDialog(
+                          context,
+                          'User not found',
+                        );
+                      } on WrongPasswordAuthException {
+                        await showErrorDialog(
+                          context,
+                          'Wrong credentials',
+                        );
+                      } on GenericAuthException {
+                        await showErrorDialog(
+                          context,
+                          'Authentication error',
+                        );
+                      }
                     },
                   )),
               Row(
