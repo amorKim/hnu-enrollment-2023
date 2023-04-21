@@ -7,46 +7,6 @@ import 'package:hnu_mis_announcement/services/cloud/student.dart';
 class FirebaseCloudStorage {
   final students = FirebaseFirestore.instance.collection('students');
 
-  // Future<void> deleteNote({required String documentId}) async {
-  //   try {
-  //     await notes.doc(documentId).delete();
-  //   } catch (e) {
-  //     throw CouldNotDeleteNoteException();
-  //   }
-  // }
-
-  // Future<void> updateNote({
-  //   required String documentId,
-  //   required String text,
-  // }) async {
-  //   try {
-  //     await notes.doc(documentId).update({textFieldName: text});
-  //   } catch (e) {
-  //     throw CouldNotUpdateNoteException();
-  //   }
-  // }
-
-  // Stream<Iterable<CloudNote>> allNotes({required String ownerUserId}) =>
-  //     notes.snapshots().map((event) => event.docs
-  //         .map((doc) => CloudNote.fromSnapshot(doc))
-  //         .where((note) => note.ownerUserId == ownerUserId));
-
-  // Future<Iterable<CloudNote>> getNote({required String ownerUserId}) async {
-  //   try {
-  //     return await notes
-  //         .where(
-  //           ownerUserIdFieldName,
-  //           isEqualTo: ownerUserId,
-  //         )
-  //         .get()
-  //         .then(
-  //           (value) => value.docs.map((doc) => CloudNote.fromSnapshot(doc)),
-  //         );
-  //   } catch (e) {
-  //     throw CouldNotUpdateNoteException();
-  //   }
-  // }
-
   Future<Student> createNewStudent({
     required String userId,
     required String program,
@@ -68,9 +28,20 @@ class FirebaseCloudStorage {
       studentContactNumFieldName: contactNum,
       studentUnitsTakenFieldName: null,
       studentMaxUnitFieldName: null,
-      studentEnrollmentsFieldName: null,
-      studentAssessmentsFieldName: null,
+      assessmentsCollectionName: [
+        {
+          assessmentMiscFieldName: null,
+          assessmentTotalTuitionFeesFieldName: null,
+        }
+      ],
     });
+    final enrollmentCollectionRef =
+        document.collection(enrollmentsCollectionName);
+    await enrollmentCollectionRef.add({
+      courseIdFieldName: null,
+      enrollmentStudentGradeFieldName: null,
+    });
+
     final fetchedStudent = await document.get();
     return Student(
       userId: userId,

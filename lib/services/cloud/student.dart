@@ -66,6 +66,6 @@ class Student {
         contactNum = snapshot.data()[studentContactNumFieldName],
         unitsTaken = snapshot.data()[studentUnitsTakenFieldName],
         maxUnit = snapshot.data()[studentMaxUnitFieldName],
-        enrollments = snapshot.data()[studentEnrollmentsFieldName],
-        assessment = snapshot.data()[studentAssessmentsFieldName];
+        enrollments = snapshot.data()[enrollmentsCollectionName],
+        assessment = snapshot.data()[assessmentsCollectionName];
 }

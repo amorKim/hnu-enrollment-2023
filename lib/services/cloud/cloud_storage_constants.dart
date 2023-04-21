@@ -13,33 +13,21 @@ const String studentAddressFieldName = "address";
 const String studentContactNumFieldName = "contact_num";
 const String studentUnitsTakenFieldName = "units_taken";
 const String studentMaxUnitFieldName = "max_unit";
-const String studentEnrollmentsFieldName = "enrollments";
-const String studentAssessmentsFieldName = "assessments";
+const String enrollmentsCollectionName = "enrollments";
+const String assessmentsCollectionName = "assessments";
 
 // Enrollment entity fields
-const String enrollmentIdFieldName = 'id';
-const String enrollmentCourseCodeFieldName = 'course_code';
-const String enrollmentUnitsTakenFieldName = 'units_taken';
-const String enrollmentAssessmentFieldName = 'assessment';
-const String enrollmentStudentGradeFieldName = 'student_grade';
+const String enrollmentIdFieldName = 'enroll_id';
+const String enrollmentStudentGradeFieldName = 'stud_grade';
 
 // Course entity fields
-const String courseCourseIdFieldName = "course_id";
-const String courseCourseNameFieldName = "course_name";
+const String courseIdFieldName = "course_id";
+const String courseNameFieldName = "course_name";
 const String courseInstructorNameFieldName = "instructor_name";
+const String courseLoadUnitFieldName = "load_unit";
 const String coursePayingUnitFieldName = "paying_unit";
-const String courseEnrollmentsFieldName = "enrollments";
-const String courseEnrollIdFieldName = "enroll_id";
-const String courseStudIdFieldName = "stud_id";
-const String courseStudGradeFieldName = "stud_grade";
 
 // assessment entity fields
 const String assessmentAssessIdFieldName = 'assess_id';
 const String assessmentMiscFieldName = 'misc';
 const String assessmentTotalTuitionFeesFieldName = 'total_tuition_fees';
-
-// enrollment fields
-const String enrollmentEnrollIdFieldName = 'enroll_id';
-const String enrollmentCourseIdFieldName = 'course_id';
-const String enrollmentStudIdFieldName = 'stud_id';
-const String enrollmentStudGradeFieldName = 'stud_grade';
