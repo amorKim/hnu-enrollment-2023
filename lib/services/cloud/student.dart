@@ -55,7 +55,7 @@ class Student {
   });
 
   Student.fromSnapshot(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
-      : userId = snapshot.data()[studentUidFieldName],
+      : userId = snapshot.data()[studentUserIdFieldName],
         studId = snapshot.id,
         program = snapshot.data()[studentProgramFieldName],
         fName = snapshot.data()[studentFNameFieldName],

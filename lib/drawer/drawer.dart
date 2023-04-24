@@ -4,7 +4,7 @@ import 'package:hnu_mis_announcement/drawer/myinfomation.dart';
 import 'package:hnu_mis_announcement/drawer/updateAddress.dart';
 import 'package:hnu_mis_announcement/drawer/updateContactNum.dart';
 import 'package:hnu_mis_announcement/services/auth/auth_service.dart';
-import 'package:hnu_mis_announcement/utilities/dialogs/logot_dialog.dart';
+import 'package:hnu_mis_announcement/utilities/dialogs/logout_dialog.dart';
 import 'package:hnu_mis_announcement/views/constants/route.dart';
 
 class MyDrawer extends StatefulWidget {

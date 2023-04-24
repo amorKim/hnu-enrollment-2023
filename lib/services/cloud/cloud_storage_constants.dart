@@ -3,7 +3,7 @@ const textFieldName = 'text';
 
 // Student entity fields
 const String studentStudIdFieldName = "stud_id";
-const String studentUidFieldName = "uid";
+const String studentUserIdFieldName = "user_id";
 const String studentProgramFieldName = "program";
 const String studentFNameFieldName = "f_name";
 const String studentLNameFieldName = "l_name";
@@ -21,13 +21,16 @@ const String enrollmentIdFieldName = 'enroll_id';
 const String enrollmentStudentGradeFieldName = 'stud_grade';
 
 // Course entity fields
-const String courseIdFieldName = "course_id";
+const String courseCodeFieldName = "course_code";
 const String courseNameFieldName = "course_name";
-const String courseInstructorNameFieldName = "instructor_name";
-const String courseLoadUnitFieldName = "load_unit";
-const String coursePayingUnitFieldName = "paying_unit";
+const String courseTeacherNameFieldName = "teacher_name";
+const String courseMaxUnitFieldName = "max_enroll";
+const String coursePayUnitFieldName = "pay_unit";
+const String courseScheduleFieldName = "schedule";
 
 // assessment entity fields
 const String assessmentAssessIdFieldName = 'assess_id';
 const String assessmentMiscFieldName = 'misc';
 const String assessmentTotalTuitionFeesFieldName = 'total_tuition_fees';
+
+const String createdAtFieldName = 'createAt';

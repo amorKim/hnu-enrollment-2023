@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hnu_mis_announcement/views/enrollmenPage/enrollment_view.dart';
 import 'package:hnu_mis_announcement/views/homepage/announcement.dart';
 
-import 'enrollment.dart';
+import '../enrollmenPage/courses_list_view.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -41,7 +42,7 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: TabBarView(children: [
                 //enrollment tab
-                EnrollmentPage(),
+                EnrollmentView(),
                 //announcement page
                 AnnouncementPage()
               ]),
