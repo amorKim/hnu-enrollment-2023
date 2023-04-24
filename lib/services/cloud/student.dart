@@ -55,7 +55,7 @@ class Student {
   });
 
   Student.fromSnapshot(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
-      : userId = snapshot.data()[studentUidFieldName],
+      : userId = snapshot.data()[studentUserIdFieldName],
         studId = snapshot.id,
         program = snapshot.data()[studentProgramFieldName],
         fName = snapshot.data()[studentFNameFieldName],
@@ -66,6 +66,6 @@ class Student {
         contactNum = snapshot.data()[studentContactNumFieldName],
         unitsTaken = snapshot.data()[studentUnitsTakenFieldName],
         maxUnit = snapshot.data()[studentMaxUnitFieldName],
-        enrollments = snapshot.data()[studentEnrollmentsFieldName],
-        assessment = snapshot.data()[studentAssessmentsFieldName];
+        enrollments = snapshot.data()[enrollmentsCollectionName],
+        assessment = snapshot.data()[assessmentsCollectionName];
 }

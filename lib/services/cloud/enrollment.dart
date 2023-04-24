@@ -1,7 +1,7 @@
 class Enrollment {
-  int enrollId;
-  int courseId;
-  String studGrade;
+  final int enrollId;
+  final int courseId;
+  final String studGrade;
 
   Enrollment({
     required this.enrollId,
