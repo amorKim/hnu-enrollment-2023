@@ -66,7 +66,7 @@ class _AnnouncementPageState extends State<AnnouncementPage> {
   _buildStoryPage(Map data){
     return Container(
       margin: const EdgeInsets.only(
-          top: 30, bottom: 50, right: 10, left: 20
+          top: 40, bottom: 50, right: 10, left: 20
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
