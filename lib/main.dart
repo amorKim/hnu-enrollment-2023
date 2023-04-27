@@ -8,7 +8,13 @@ import 'package:hnu_mis_announcement/services/auth/auth_service.dart';
 import 'package:hnu_mis_announcement/views/constants/route.dart';
 import 'package:hnu_mis_announcement/views/register_view.dart';
 import 'package:hnu_mis_announcement/views/verify_email_view.dart';
+<<<<<<< HEAD
 //ASOY, Steven Jake Commit
+=======
+
+// ASOY Steven Jake
+
+>>>>>>> 9ad63bf313100948c7ccf36524c8cadcbc238be4
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
