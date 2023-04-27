@@ -8,8 +8,7 @@ import 'package:hnu_mis_announcement/services/auth/auth_service.dart';
 import 'package:hnu_mis_announcement/views/constants/route.dart';
 import 'package:hnu_mis_announcement/views/register_view.dart';
 import 'package:hnu_mis_announcement/views/verify_email_view.dart';
-//tesdfsfsdfdsf
-// Test Pull
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
