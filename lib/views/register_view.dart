@@ -6,6 +6,7 @@ import 'package:hnu_mis_announcement/services/cloud/student.dart';
 import 'package:hnu_mis_announcement/utilities/dialogs/error_dialog.dart';
 import 'package:hnu_mis_announcement/views/constants/route.dart';
 import 'package:intl/intl.dart';
+import 'package:select_form_field/select_form_field.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -26,6 +27,12 @@ class _RegisterViewState extends State<RegisterView> {
   late final TextEditingController _address;
   late final TextEditingController _contactNumber;
 
+  final List<Map<String, dynamic>> _programOptions = [
+    {'value': 'BSCS', 'label': 'BSCS'},
+    {'value': 'BSIT', 'label': 'BSIT'},
+
+  ];
+  String? _selectedProgram;
   @override
   void initState() {
     _studentService = FirebaseCloudStorage();
@@ -77,12 +84,22 @@ class _RegisterViewState extends State<RegisterView> {
               decoration:
                   const InputDecoration(hintText: 'Enter your password'),
             ),
-            TextField(
+            SelectFormField(
               controller: _program,
-              enableSuggestions: false,
-              autocorrect: false,
-              decoration:
-                  const InputDecoration(hintText: 'Enter your program/course'),
+              type: SelectFormFieldType.dropdown,
+              labelText: 'Program/Course',
+              items: _programOptions,
+              onChanged: (dynamic value) {
+                setState(() {
+                  _selectedProgram = value;
+                });
+              },
+              onSaved: (dynamic value) {
+                _selectedProgram = value;
+              },
+              decoration: const InputDecoration(
+                hintText: 'Select your program/course',
+              ),
             ),
             TextField(
               controller: _firstName,
