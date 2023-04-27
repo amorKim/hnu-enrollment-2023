@@ -19,6 +19,9 @@ const String assessmentsCollectionName = "assessments";
 // Enrollment entity fields
 const String enrollmentIdFieldName = 'enroll_id';
 const String enrollmentStudentGradeFieldName = 'stud_grade';
+const String enrollmentCourseIdFieldName = 'course_id';
+const String enrollmentStudentIdFieldName = 'student_id';
+const String enrollmentEnrollAtFieldName = "enrollAt";
 
 // Course entity fields
 const String courseCodeFieldName = "course_code";

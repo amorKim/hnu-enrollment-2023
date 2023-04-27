@@ -3,11 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:hnu_mis_announcement/services/cloud/cloud_storage_constants.dart';
 import 'package:hnu_mis_announcement/services/cloud/cloud_storage_exceptions.dart';
 import 'package:hnu_mis_announcement/services/cloud/course.dart';
+import 'package:hnu_mis_announcement/services/cloud/enrollment.dart';
 import 'package:hnu_mis_announcement/services/cloud/student.dart';
 
 class FirebaseCloudStorage {
   final students = FirebaseFirestore.instance.collection('students');
   final courses = FirebaseFirestore.instance.collection('courses');
+
+  //get all course offered
+  Stream<Iterable<Course>> allCourses() => courses
+      .snapshots()
+      .map((event) => event.docs.map((doc) => Course.fromSnapshot(doc)));
 
   //register student
   Future<Student> createNewStudent({
@@ -56,10 +62,32 @@ class FirebaseCloudStorage {
     );
   }
 
-  //get all course offered
-  Stream<Iterable<Course>> allCourses() => courses
-      .snapshots()
-      .map((event) => event.docs.map((doc) => Course.fromSnapshot(doc)));
+  Future<void> enrollStudentToCourse({
+    required String studentId,
+    required String courseId,
+  }) async {
+    // Get the student and course documents
+    final studentDocRef = students.doc(studentId);
+    final courseDocRef = courses.doc(courseId);
+
+    // Add a new enrollment sub-collection to the student document
+    final enrollmentDocRef = await studentDocRef.collection('enrollments').add({
+      enrollmentCourseIdFieldName: courseId,
+      enrollmentEnrollAtFieldName: Timestamp.now(),
+      enrollmentStudentGradeFieldName: null,
+    });
+
+    // Add a new enrollment sub-map to the course document
+    final enrollmentId = await enrollmentDocRef.get();
+    final enrollmentData = {
+      'enrollmentId': enrollmentId,
+      'studentId': studentId,
+      'studentGrade': null,
+    };
+    await courseDocRef.update({
+      'enrollments': FieldValue.arrayUnion([enrollmentData]),
+    });
+  }
 
   static final FirebaseCloudStorage _shared =
       FirebaseCloudStorage._sharedInstance();
