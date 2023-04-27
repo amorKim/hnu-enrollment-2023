@@ -31,7 +31,7 @@ dependencies:
   carousel_slider: 4.2.1
   flutter:
     sdk: flutter
-  splashscreen:
+  select_form_field: "^2.2.0"
 
 
 
