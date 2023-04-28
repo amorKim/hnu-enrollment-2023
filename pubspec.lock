@@ -264,6 +264,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  select_form_field:
+    dependency: "direct main"
+    description:
+      name: select_form_field
+      sha256: "11b2ab3842b9da2a49a7933239c3d428e0cd2d0aa6a70b7e70f370dbf263a751"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -277,14 +285,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.9.1"
-  splashscreen:
-    dependency: "direct main"
-    description:
-      name: splashscreen
-      sha256: "4c7c83f972d98eb8a9f22f896b016923d632056f2e1e323047130d3d2eecd159"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.3.5"
   stack_trace:
     dependency: transitive
     description:
@@ -342,5 +342,5 @@ packages:
     source: hosted
     version: "2.1.4"
 sdks:
-  dart: ">=2.19.3 <3.0.0"
+  dart: ">=2.19.2 <3.0.0"
   flutter: ">=1.20.0"
