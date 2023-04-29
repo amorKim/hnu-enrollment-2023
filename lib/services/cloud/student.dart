@@ -4,24 +4,6 @@ import 'package:hnu_mis_announcement/services/cloud/assesment.dart';
 import 'package:hnu_mis_announcement/services/cloud/cloud_storage_constants.dart';
 import 'package:hnu_mis_announcement/services/cloud/enrollment.dart';
 
-// @immutable
-class CloudNote {
-  final String documentId;
-  final String ownerUserId;
-  final String text;
-
-  const CloudNote({
-    required this.documentId,
-    required this.ownerUserId,
-    required this.text,
-  });
-
-  CloudNote.fromSnapshot(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
-      : documentId = snapshot.id,
-        ownerUserId = snapshot.data()[ownerUserIdFieldName],
-        text = snapshot.data()[textFieldName] as String;
-}
-
 @immutable
 class Student {
   final String userId;
@@ -36,7 +18,7 @@ class Student {
   final int? unitsTaken;
   final int? maxUnit;
   final List<Enrollment>? enrollments;
-  final Assessment? assessment;
+  final Map? assessment;
 
   const Student({
     required this.userId,
@@ -61,7 +43,8 @@ class Student {
         fName = snapshot.data()[studentFNameFieldName],
         lName = snapshot.data()[studentLNameFieldName],
         mName = snapshot.data()[studentMNameFieldName],
-        dBirth = snapshot.data()[studentDBirthFieldName],
+        dBirth =
+            (snapshot.data()[studentDBirthFieldName] as Timestamp).toDate(),
         address = snapshot.data()[studentAddressFieldName],
         contactNum = snapshot.data()[studentContactNumFieldName],
         unitsTaken = snapshot.data()[studentUnitsTakenFieldName],

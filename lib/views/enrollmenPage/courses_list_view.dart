@@ -28,7 +28,9 @@ class CoursesListView extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
           trailing: IconButton(
-            onPressed: () async {},
+            onPressed: () async {
+              onEnrollCourse(course);
+            },
             icon: const Icon(Icons.add_card_rounded),
           ),
         );
