@@ -20,6 +20,9 @@ const String assessmentsCollectionName = "assessments";
 const String enrollmentIdFieldName = 'enroll_id';
 const String enrollmentStudentGradeFieldName = 'stud_grade';
 const String enrollmentCourseIdFieldName = 'course_id';
+const String enrollmentCourseCodeFieldName = 'course_code';
+const String enrollmentCourseNameFieldName = 'course_name';
+const String enrollmentCourseScheduleFieldName = 'schedule';
 const String enrollmentStudentIdFieldName = 'student_id';
 const String enrollmentEnrollAtFieldName = "enrollAt";
 
@@ -28,8 +31,9 @@ const String courseCodeFieldName = "course_code";
 const String courseNameFieldName = "course_name";
 const String courseTeacherNameFieldName = "teacher_name";
 const String courseMaxUnitFieldName = "max_enroll";
-const String coursePayUnitFieldName = "pay_unit";
+const String coursePayUnitFieldName = "pay_units";
 const String courseScheduleFieldName = "schedule";
+const String courseScheduleLabFieldName = "schedule_lab";
 
 // assessment entity fields
 const String assessmentAssessIdFieldName = 'assess_id';

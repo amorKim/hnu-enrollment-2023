@@ -18,7 +18,7 @@ class Student {
   final int? unitsTaken;
   final int? maxUnit;
   final List<Enrollment>? enrollments;
-  final Assessment? assessment;
+  final Map? assessment;
 
   const Student({
     required this.userId,
@@ -43,7 +43,8 @@ class Student {
         fName = snapshot.data()[studentFNameFieldName],
         lName = snapshot.data()[studentLNameFieldName],
         mName = snapshot.data()[studentMNameFieldName],
-        dBirth = snapshot.data()[studentDBirthFieldName],
+        dBirth =
+            (snapshot.data()[studentDBirthFieldName] as Timestamp).toDate(),
         address = snapshot.data()[studentAddressFieldName],
         contactNum = snapshot.data()[studentContactNumFieldName],
         unitsTaken = snapshot.data()[studentUnitsTakenFieldName],
