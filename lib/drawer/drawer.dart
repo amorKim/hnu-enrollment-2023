@@ -15,9 +15,10 @@ class MyDrawer extends StatefulWidget {
   State<MyDrawer> createState() => _MyDrawerState();
 }
 
-/////////
-User? _user = FirebaseAuth.instance.currentUser;
-////////
+////
+final FirebaseAuth _auth = FirebaseAuth.instance;
+final User? user = _auth.currentUser;
+////
 
 class _MyDrawerState extends State<MyDrawer> {
   @override
@@ -118,13 +119,27 @@ class _MyDrawerState extends State<MyDrawer> {
     const img = 'assets/Kimberly Amor.jpg';
     return Column(
       children: [
-        UserAccountsDrawerHeader(
-          accountName: Text(_user?.displayName ?? 'f_name'),
-          accountEmail: Text(_user?.email ?? ''),
-          currentAccountPicture: const CircleAvatar(
-            backgroundImage: AssetImage(img),
-          ),
+        const CircleAvatar(
+          radius: 40,
+          backgroundImage: AssetImage(img),
         ),
+        const SizedBox(
+          width: 20,
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(
+              height: 10,
+            ),
+            Text(user?.displayName ?? 'No user logged in',
+            style: const TextStyle(color: Colors.black),),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(user?.email ?? 'No user logged in'),
+          ],
+        )
       ],
     );
   }
