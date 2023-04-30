@@ -29,7 +29,7 @@ class _MyDrawerState extends State<MyDrawer> {
     final documentSnapshot = await FirebaseFirestore.instance.collection('students').doc(currentUser!.uid).get();
 
     setState(() {
-      firstName = documentSnapshot.data()?['f_name'];
+      firstName = documentSnapshot.data()?['uid'];
     });
   }
 
@@ -152,7 +152,7 @@ class _MyDrawerState extends State<MyDrawer> {
               height: 10,
             ),
             Text(
-              firstName != null ? '$firstName' : 'Loading',
+              firstName != null ? '$firstName' : 'Loading...',
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(
