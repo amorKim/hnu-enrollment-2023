@@ -3,11 +3,64 @@ import 'package:flutter/material.dart';
 import 'package:hnu_mis_announcement/services/cloud/cloud_storage_constants.dart';
 import 'package:hnu_mis_announcement/services/cloud/cloud_storage_exceptions.dart';
 import 'package:hnu_mis_announcement/services/cloud/course.dart';
+import 'package:hnu_mis_announcement/services/cloud/enrollment.dart';
 import 'package:hnu_mis_announcement/services/cloud/student.dart';
+import 'package:intl/intl.dart';
 
 class FirebaseCloudStorage {
   final students = FirebaseFirestore.instance.collection('students');
-  final courses = FirebaseFirestore.instance.collection('courses');
+  final courses = FirebaseFirestore.instance.collection('courses_it');
+  final enrollments = FirebaseFirestore.instance.collection('Enrollments');
+
+  bool _hasScheduleConflict(
+    Map<String, dynamic> schedule1,
+    Map<String, dynamic> schedule2,
+  ) {
+    // If the schedules are on different days, there is no conflict
+    if (schedule1['days'] != schedule2['days']) {
+      return false;
+    }
+
+    final startTime1 = _parseTime(schedule1['start_time']);
+    final endTime1 = _parseTime(schedule1['end_time']);
+    final startTime2 = _parseTime(schedule2['start_time']);
+    final endTime2 = _parseTime(schedule2['end_time']);
+
+    // If the end time of one schedule is before the start time of the other, there is no conflict
+    if (endTime1.isBefore(startTime2) || endTime2.isBefore(startTime1)) {
+      return false;
+    }
+
+    // Otherwise, there is a conflict
+    return true;
+  }
+
+  DateTime _parseTime(String timeStr) {
+    final format = DateFormat('hh:mma');
+    return format.parse(timeStr);
+  }
+
+  Future<Student> getStudent({required String ownerUserId}) async {
+    try {
+      final querySnapshot = await students
+          .where(
+            ownerUserIdFieldName,
+            isEqualTo: ownerUserId,
+          )
+          .get();
+      if (querySnapshot.docs.isEmpty) {
+        throw StudentNotFoundException();
+      }
+      return Student.fromSnapshot(querySnapshot.docs.first);
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  //get all course offered
+  Stream<Iterable<Course>> allCourses() => courses
+      .snapshots()
+      .map((event) => event.docs.map((doc) => Course.fromSnapshot(doc)));
 
   //register student
   Future<Student> createNewStudent({
@@ -56,10 +109,53 @@ class FirebaseCloudStorage {
     );
   }
 
-  //get all course offered
-  Stream<Iterable<Course>> allCourses() => courses
-      .snapshots()
-      .map((event) => event.docs.map((doc) => Course.fromSnapshot(doc)));
+  Future<void> enrollStudentToCourse({
+    required String userId,
+    required String courseId,
+    required String courseCode,
+    required String courseName,
+    required Map<String, dynamic> courseSchedule,
+  }) async {
+    // Get the student and course documents
+    final student = await getStudent(ownerUserId: userId);
+
+    final enrollmentDocs =
+        await enrollments.where('student_id', isEqualTo: student.studId).get();
+    final enrolledCourses = enrollmentDocs.docs.map((doc) => doc.id).toList();
+
+    for (final enrolledCourseId in enrolledCourses) {
+      final enrolledCourseDocRef = enrollments.doc(enrolledCourseId);
+      final enrolledCourseDoc = await enrolledCourseDocRef.get();
+      final Map<String, dynamic> enrolledCourseSchedule =
+          enrolledCourseDoc.data()?['schedule'];
+
+      // Check for conflicting schedule
+      if (_hasScheduleConflict(enrolledCourseSchedule, courseSchedule)) {
+        throw 'Cannot enroll in $courseId due to conflicting schedule with enrolled course $enrolledCourseId';
+      }
+    }
+
+    // Add a new enrollment collection
+    final enrollmentDocRef = await enrollments.add({
+      enrollmentStudentIdFieldName: student.studId,
+      enrollmentCourseIdFieldName: courseId,
+      enrollmentCourseCodeFieldName: courseCode,
+      enrollmentCourseScheduleFieldName: courseSchedule,
+      enrollmentEnrollAtFieldName: Timestamp.now(),
+      enrollmentStudentGradeFieldName: null,
+    });
+
+    // Add a new enrollment sub-map to the course document
+    //   final enrollmentId = await enrollmentDocRef.get();
+    //   final enrollmentData = {
+    //     'enrollmentId': enrollmentId,
+    //     'studentId': student.studId,
+    //     'studentGrade': null,
+    //   };
+    //   await courseDocRef.update({
+    //     'enrollments': FieldValue.arrayUnion([enrollmentData]),
+    //   });
+  }
 
   static final FirebaseCloudStorage _shared =
       FirebaseCloudStorage._sharedInstance();

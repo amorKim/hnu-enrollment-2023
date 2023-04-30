@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hnu_mis_announcement/services/auth/auth_service.dart';
+import 'package:hnu_mis_announcement/services/cloud/cloud_storage_constants.dart';
 import 'package:hnu_mis_announcement/services/cloud/course.dart';
 import 'package:hnu_mis_announcement/services/cloud/firebase_cloud_storage.dart';
 import 'package:hnu_mis_announcement/services/cloud/student.dart';
@@ -36,8 +37,13 @@ class _EnrollmentViewState extends State<EnrollmentView> {
               final allCourses = snapshot.data as Iterable<Course>;
               return CoursesListView(
                 courses: allCourses,
-                onEnrollCourse: (Course course) {
-                  print(course.toString());
+                onEnrollCourse: (course) async {
+                  await _enrollmentService.enrollStudentToCourse(
+                      userId: userId,
+                      courseId: course.documentId,
+                      courseCode: course.courseCode,
+                      courseName: course.courseName,
+                      courseSchedule: course.schedule);
                 },
               );
             } else {
