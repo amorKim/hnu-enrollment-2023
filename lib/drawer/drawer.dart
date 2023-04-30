@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hnu_mis_announcement/drawer/drawerItem.dart';
 import 'package:hnu_mis_announcement/drawer/myinfomation.dart';
@@ -13,6 +14,10 @@ class MyDrawer extends StatefulWidget {
   @override
   State<MyDrawer> createState() => _MyDrawerState();
 }
+
+/////////
+User? _user = FirebaseAuth.instance.currentUser;
+////////
 
 class _MyDrawerState extends State<MyDrawer> {
   @override
@@ -113,39 +118,13 @@ class _MyDrawerState extends State<MyDrawer> {
     const img = 'assets/Kimberly Amor.jpg';
     return Column(
       children: [
-        const CircleAvatar(
-          radius: 40,
-          backgroundImage: AssetImage(img),
+        UserAccountsDrawerHeader(
+          accountName: Text(_user?.displayName ?? 'f_name'),
+          accountEmail: Text(_user?.email ?? ''),
+          currentAccountPicture: const CircleAvatar(
+            backgroundImage: AssetImage(img),
+          ),
         ),
-        const SizedBox(
-          width: 20,
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              'Kimberly Amor',
-              style: TextStyle(fontSize: 16, color: Colors.black),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              'amor.kimberly@hnu.edu.ph',
-              style: TextStyle(fontSize: 16, color: Colors.black),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              'Roman Catholic',
-              style: TextStyle(fontSize: 16, color: Colors.black),
-            )
-          ],
-        )
       ],
     );
   }
