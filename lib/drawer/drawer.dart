@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hnu_mis_announcement/drawer/drawerItem.dart';
@@ -21,6 +22,24 @@ final User? user = _auth.currentUser;
 ////
 
 class _MyDrawerState extends State<MyDrawer> {
+  String? firstName;
+
+  Future<void> getUserFirstName() async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    final documentSnapshot = await FirebaseFirestore.instance.collection('students').doc(currentUser!.uid).get();
+
+    setState(() {
+      firstName = documentSnapshot.data()?['f_name'];
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUserFirstName();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -132,8 +151,10 @@ class _MyDrawerState extends State<MyDrawer> {
             const SizedBox(
               height: 10,
             ),
-            Text(user?.displayName ?? 'No user logged in',
-            style: const TextStyle(color: Colors.black),),
+            Text(
+              firstName != null ? '$firstName' : 'Loading',
+              style: const TextStyle(fontSize: 16),
+            ),
             const SizedBox(
               height: 10,
             ),
