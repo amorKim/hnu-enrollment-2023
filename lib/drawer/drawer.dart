@@ -78,7 +78,7 @@ class _MyDrawerState extends State<MyDrawer> {
                     if (!mounted) return;
                     Navigator.of(context).pushNamedAndRemoveUntil(
                       loginRoute,
-                      (_) => false,
+                          (_) => false,
                     );
                   }
                 },
