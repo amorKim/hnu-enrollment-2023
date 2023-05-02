@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hnu_mis_announcement/services/auth/auth_exceptions.dart';
 import 'package:hnu_mis_announcement/services/auth/auth_service.dart';
@@ -7,6 +10,7 @@ import 'package:hnu_mis_announcement/utilities/dialogs/error_dialog.dart';
 import 'package:hnu_mis_announcement/views/constants/route.dart';
 import 'package:intl/intl.dart';
 import 'package:select_form_field/select_form_field.dart';
+import 'package:image_picker/image_picker.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -30,7 +34,6 @@ class _RegisterViewState extends State<RegisterView> {
   final List<Map<String, dynamic>> _programOptions = [
     {'value': 'BSCS', 'label': 'BSCS'},
     {'value': 'BSIT', 'label': 'BSIT'},
-
   ];
   String? _selectedProgram;
   @override
@@ -60,31 +63,47 @@ class _RegisterViewState extends State<RegisterView> {
     super.dispose();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text('Register Student'),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            TextField(
+            const SizedBox(height: 10),
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+              child:TextField(
               controller: _email,
               enableSuggestions: false,
               autocorrect: false,
               keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(hintText: 'Enter your email'),
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Enter email address',
+                ),
             ),
-            TextField(
-              controller: _password,
-              obscureText: true,
-              enableSuggestions: false,
-              autocorrect: false,
-              decoration:
-                  const InputDecoration(hintText: 'Enter your password'),
             ),
-            SelectFormField(
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+              child:TextField(
+                controller: _password,
+                obscureText: true,
+                enableSuggestions: false,
+                autocorrect: false,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Enter password',
+                ),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+             child: SelectFormField(
               controller: _program,
               type: SelectFormFieldType.dropdown,
               labelText: 'Program/Course',
@@ -98,132 +117,173 @@ class _RegisterViewState extends State<RegisterView> {
                 _selectedProgram = value;
               },
               decoration: const InputDecoration(
-                hintText: 'Select your program/course',
+                border: OutlineInputBorder(),
+                labelText: 'Select your program/course',
               ),
             ),
-            TextField(
+            ),
+          Container(
+            padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+            child:  TextField(
               controller: _firstName,
               enableSuggestions: false,
               autocorrect: false,
-              decoration:
-                  const InputDecoration(hintText: 'Enter your first name'),
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'First name',
             ),
-            TextField(
+            ),
+        ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+            child: TextField(
               controller: _lastName,
               enableSuggestions: false,
               autocorrect: false,
-              decoration:
-                  const InputDecoration(hintText: 'Enter your last name'),
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Middle name',
+              ),
             ),
-            TextField(
+            ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+            child: TextField(
               controller: _middleName,
               enableSuggestions: false,
               autocorrect: false,
-              decoration:
-                  const InputDecoration(hintText: 'Enter your middle name'),
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+              labelText: 'Last name',
             ),
-            GestureDetector(
-              onTap: () async {
-                final initialDate = _selectedDate ?? DateTime.now();
-                final newDate = await showDatePicker(
-                  context: context,
-                  initialDate: initialDate,
-                  firstDate: DateTime(1900),
-                  lastDate: DateTime.now(),
-                );
-                if (newDate != null) {
-                  setState(() {
-                    _selectedDate = newDate;
-                  });
-                }
-              },
-              child: AbsorbPointer(
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                    hintText: 'Select your date of birth',
+            ),
+            ),
+
+             Container(
+               padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+               child: GestureDetector(
+                onTap: () async {
+                  final initialDate = _selectedDate ?? DateTime.now();
+                  final newDate = await showDatePicker(
+                    context: context,
+                    initialDate: initialDate,
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime.now(),
+                  );
+                  if (newDate != null) {
+                    setState(() {
+                      _selectedDate = newDate;
+                    });
+                  }
+                },
+                child: AbsorbPointer(
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Select birthdate',
+                    ),
+                    controller: TextEditingController(
+                      text: _selectedDate != null
+                          ? DateFormat('MM/dd/yyyy').format(_selectedDate!)
+                          : '',
+                    ),
+                    keyboardType: TextInputType.datetime,
+                    textInputAction: TextInputAction.done,
                   ),
-                  controller: TextEditingController(
-                    text: _selectedDate != null
-                        ? DateFormat('MM/dd/yyyy').format(_selectedDate!)
-                        : '',
-                  ),
-                  keyboardType: TextInputType.datetime,
-                  textInputAction: TextInputAction.done,
+                ),
+            ),
+             ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+              child: TextField(
+                controller: _address,
+                enableSuggestions: false,
+                autocorrect: false,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Enter address',
                 ),
               ),
             ),
-            TextField(
-              controller: _address,
-              enableSuggestions: false,
-              autocorrect: false,
-              decoration: const InputDecoration(hintText: 'Enter your address'),
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+              child: TextField(
+                controller: _contactNumber,
+                enableSuggestions: false,
+                autocorrect: false,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+              labelText: 'Enter contact number',
+              ),
             ),
-            TextField(
-              controller: _contactNumber,
-              enableSuggestions: false,
-              autocorrect: false,
-              decoration:
-                  const InputDecoration(hintText: 'Enter your contact number'),
             ),
-            TextButton(
-              onPressed: () async {
-                final email = _email.text;
-                final password = _password.text;
-                final program = _program.text;
-                final firstname = _firstName.text;
-                final lastname = _lastName.text;
-                final middlename = _middleName.text;
-                final dateBirth = _selectedDate;
-                final address = _address.text;
-                final contactNum = _contactNumber.text;
-                try {
-                  // Create user account
-                  await AuthService.firebase().createUser(
-                    email: email,
-                    password: password,
-                  );
 
-                  String userId = AuthService.firebase().currentUser!.id;
+            Container(
+              height: 45,
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  minimumSize: MaterialStateProperty.all<Size>(const Size(100, 50)),
+                ),
+                onPressed: () async {
+                  final email = _email.text;
+                  final password = _password.text;
+                  final program = _program.text;
+                  final firstname = _firstName.text;
+                  final lastname = _lastName.text;
+                  final middlename = _middleName.text;
+                  final dateBirth = _selectedDate;
+                  final address = _address.text;
+                  final contactNum = _contactNumber.text;
+                  try {
+                    // Create user account
+                    await AuthService.firebase().createUser(
+                      email: email,
+                      password: password,
+                    );
 
-                  await _studentService.createNewStudent(
-                    userId: userId,
-                    program: program,
-                    fName: firstname,
-                    lName: lastname,
-                    mName: middlename,
-                    dBirth: dateBirth!,
-                    address: address,
-                    contactNum: contactNum,
-                  );
+                    String userId = AuthService.firebase().currentUser!.id;
 
-                  // Send email verification
-                  AuthService.firebase().sendEmailVerification();
+                    await _studentService.createNewStudent(
+                      userId: userId,
+                      program: program,
+                      fName: firstname,
+                      lName: lastname,
+                      mName: middlename,
+                      dBirth: dateBirth!,
+                      address: address,
+                      contactNum: contactNum,
+                    );
 
-                  if (!mounted) return;
-                  Navigator.of(context).pushNamed(verifyEmailRoute);
-                } on WeakPasswordAuthException {
-                  await showErrorDialog(
-                    context,
-                    'Weak password',
-                  );
-                } on EmailAlreadyInUseAuthException {
-                  await showErrorDialog(
-                    context,
-                    'Email is already in use',
-                  );
-                } on InvalidEmailAuthException {
-                  await showErrorDialog(
-                    context,
-                    'This is an invalid email address',
-                  );
-                } on GenericAuthException {
-                  await showErrorDialog(
-                    context,
-                    'Failed to register',
-                  );
-                }
-              },
-              child: const Text('Register'),
+                    // Send email verification
+                    AuthService.firebase().sendEmailVerification();
+
+                    if (!mounted) return;
+                    Navigator.of(context).pushNamed(verifyEmailRoute);
+                  } on WeakPasswordAuthException {
+                    await showErrorDialog(
+                      context,
+                      'Weak password',
+                    );
+                  } on EmailAlreadyInUseAuthException {
+                    await showErrorDialog(
+                      context,
+                      'Email is already in use',
+                    );
+                  } on InvalidEmailAuthException {
+                    await showErrorDialog(
+                      context,
+                      'This is an invalid email address',
+                    );
+                  } on GenericAuthException {
+                    await showErrorDialog(
+                      context,
+                      'Failed to register',
+                    );
+                  }
+                },
+                child: const Text('Register'),
+              ),
             ),
             TextButton(
               onPressed: () {
