@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hnu_mis_announcement/views/enrollmenPage/enrollment_view.dart';
+import 'package:hnu_mis_announcement/views/enrollmentPage/enrollment_view.dart';
 import 'package:hnu_mis_announcement/views/homepage/announcement.dart';
 
-import '../enrollmenPage/courses_list_view.dart';
+import '../enrollmentPage/courses_list_view.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

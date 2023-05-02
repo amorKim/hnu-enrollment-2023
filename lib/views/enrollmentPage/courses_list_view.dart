@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hnu_mis_announcement/services/cloud/course.dart';
-import 'package:hnu_mis_announcement/services/cloud/enrollment.dart';
 
 typedef CourseCallback = void Function(Course course);
 
