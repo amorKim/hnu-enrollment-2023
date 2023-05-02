@@ -18,11 +18,13 @@ const String assessmentsCollectionName = "assessments";
 
 // Enrollment entity fields
 const String enrollmentIdFieldName = 'enroll_id';
+const String enrollmentUserIdFieldName = 'user_id';
 const String enrollmentStudentGradeFieldName = 'stud_grade';
 const String enrollmentCourseIdFieldName = 'course_id';
 const String enrollmentCourseCodeFieldName = 'course_code';
 const String enrollmentCourseNameFieldName = 'course_name';
 const String enrollmentCourseScheduleFieldName = 'schedule';
+const String enrollmentCourseScheduleLabFieldName = 'schedule_lab';
 const String enrollmentStudentIdFieldName = 'student_id';
 const String enrollmentEnrollAtFieldName = "enrollAt";
 
