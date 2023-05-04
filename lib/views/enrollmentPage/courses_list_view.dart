@@ -15,25 +15,37 @@ class CoursesListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: courses.length,
-      itemBuilder: (context, index) {
-        final course = courses.elementAt(index);
-        return ListTile(
-          title: Text(
-            course.courseName,
-            maxLines: 1,
-            softWrap: true,
-            overflow: TextOverflow.ellipsis,
-          ),
-          trailing: IconButton(
-            onPressed: () async {
-              onEnrollCourse(course);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const SizedBox(height: 20),
+        const Text("COURSE OFFERINGS",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+        ),
+        const SizedBox(height: 10),
+        Expanded(
+          child: ListView.builder(
+            itemCount: courses.length,
+            itemBuilder: (context, index) {
+              final course = courses.elementAt(index);
+              return ListTile(
+                title: Text(
+                  course.courseName,
+                  maxLines: 1,
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                trailing: IconButton(
+                  onPressed: () async {
+                    onEnrollCourse(course);
+                  },
+                  icon: const Icon(Icons.add_card_rounded),
+                ),
+              );
             },
-            icon: const Icon(Icons.add_card_rounded),
           ),
-        );
-      },
+        ),
+      ],
     );
   }
 }

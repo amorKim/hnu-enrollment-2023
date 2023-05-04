@@ -15,6 +15,7 @@ class _LoginPageState extends State<LoginPage> {
   late final TextEditingController _email;
   late final TextEditingController _password;
   bool _obscureText = true;
+
   @override
   void initState() {
     _email = TextEditingController();
@@ -81,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                   obscureText: _obscureText,
                   controller: _password,
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
                     labelText: 'Password',
                     suffixIcon: IconButton(
                       icon: Icon(
@@ -91,7 +92,8 @@ class _LoginPageState extends State<LoginPage> {
                       onPressed: () {
                         setState(() {
                           _obscureText = !_obscureText;
-                        });
+                        }
+                        );
                       },
                     ),
                   ),

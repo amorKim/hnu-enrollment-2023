@@ -30,6 +30,9 @@ class _RegisterViewState extends State<RegisterView> {
   DateTime? _selectedDate;
   late final TextEditingController _address;
   late final TextEditingController _contactNumber;
+  bool _obscureText = true;
+
+  
 
   final List<Map<String, dynamic>> _programOptions = [
     {'value': 'BSCS', 'label': 'BSCS'},
@@ -91,13 +94,25 @@ class _RegisterViewState extends State<RegisterView> {
             Container(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
               child:TextField(
+                obscureText: _obscureText,
                 controller: _password,
-                obscureText: true,
+                //obscureText: true,
                 enableSuggestions: false,
                 autocorrect: false,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
                   labelText: 'Enter password',
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscureText ? Icons.visibility : Icons.visibility_off,
+                      color: Colors.grey,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscureText = !_obscureText;
+                      });
+                    },
+                  ),
                 ),
               ),
             ),
@@ -217,7 +232,10 @@ class _RegisterViewState extends State<RegisterView> {
               ),
             ),
             ),
+            const SizedBox(height: 10),
+            
 
+            const SizedBox(height: 15),
             Container(
               height: 45,
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
