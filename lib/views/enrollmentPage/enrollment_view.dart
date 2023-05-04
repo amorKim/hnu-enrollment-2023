@@ -75,6 +75,8 @@ class _EnrollmentViewState extends State<EnrollmentView> {
                     child: EnrolledCoursesListView(
                       enrollments: allEnrollments,
                       onUnEnroll: (enrollment) {
+                        _enrollmentService.unEnroll(enrollment.documentId);
+
                         print(enrollment.toString());
                       },
                     ),

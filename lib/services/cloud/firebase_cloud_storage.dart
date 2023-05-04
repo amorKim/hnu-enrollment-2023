@@ -121,6 +121,7 @@ class FirebaseCloudStorage {
     );
   }
 
+  //enroll course
   Future<void> enrollStudentToCourse({
     required String userId,
     required String courseId,
@@ -159,17 +160,12 @@ class FirebaseCloudStorage {
       enrollmentEnrollAtFieldName: Timestamp.now(),
       enrollmentStudentGradeFieldName: null,
     });
+  }
 
-    // Add a new enrollment sub-map to the course document
-    //   final enrollmentId = await enrollmentDocRef.get();
-    //   final enrollmentData = {
-    //     'enrollmentId': enrollmentId,
-    //     'studentId': student.studId,
-    //     'studentGrade': null,
-    //   };
-    //   await courseDocRef.update({
-    //     'enrollments': FieldValue.arrayUnion([enrollmentData]),
-    //   });
+  void unEnroll(String documentId) async {
+    final enrollmentsDocRef = enrollments.doc(documentId);
+    //delete course
+    enrollmentsDocRef.delete();
   }
 
   static final FirebaseCloudStorage _shared =
