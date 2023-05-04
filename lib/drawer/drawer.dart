@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:hnu_mis_announcement/drawer/drawerItem.dart';
 import 'package:hnu_mis_announcement/drawer/myinfomation.dart';
@@ -9,6 +12,7 @@ import 'package:hnu_mis_announcement/services/cloud/firebase_cloud_storage.dart'
 import 'package:hnu_mis_announcement/services/cloud/student.dart';
 import 'package:hnu_mis_announcement/utilities/dialogs/logout_dialog.dart';
 import 'package:hnu_mis_announcement/views/constants/route.dart';
+import 'package:image_picker/image_picker.dart';
 
 class MyDrawer extends StatefulWidget {
   const MyDrawer({Key? key}) : super(key: key);
@@ -24,12 +28,33 @@ class _MyDrawerState extends State<MyDrawer> {
 
   late final FirebaseCloudStorage _enrollmentService;
 
+  String imageUrl = " ";
+
   @override
   void initState() {
     super.initState();
     _enrollmentService = FirebaseCloudStorage();
     userId = user!.id;
     email = user!.email;
+  }
+
+  void pickUploadImage() async {
+    final image = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      maxHeight: 512,
+      maxWidth: 512,
+      imageQuality: 75,
+    );
+
+    Reference ref = FirebaseStorage.instance.ref().child('profilepic.jpg');
+
+    await ref.putFile(File(image!.path));
+    ref.getDownloadURL().then((value) {
+      print(value);
+      setState(() {
+        imageUrl = value;
+      });
+    });
   }
 
   @override
@@ -98,7 +123,7 @@ class _MyDrawerState extends State<MyDrawer> {
                           if (!mounted) return;
                           Navigator.of(context).pushNamedAndRemoveUntil(
                             loginRoute,
-                            (_) => false,
+                                (_) => false,
                           );
                         }
                       },
@@ -134,14 +159,33 @@ class _MyDrawerState extends State<MyDrawer> {
     final String? fName = student?.fName;
     final String? lName = student?.lName;
     final String? mName = student?.mName;
-    const img =
-        'https://icon-library.com/images/default-profile-icon/default-profile-icon-6.jpg';
+    //const img =
+    //'https://icon-library.com/images/default-profile-icon/default-profile-icon-6.jpg';
     return Column(
       children: [
-        const CircleAvatar(
-          radius: 40,
-          backgroundImage: NetworkImage(img),
+
+        GestureDetector(
+          onTap: (){
+            pickUploadImage();
+          },
+          child: Container(
+            margin: const EdgeInsets.only(top: 20),
+            width: 120,
+            height: 120,
+            alignment: Alignment.bottomCenter,
+            decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(100)),
+                color: Colors.green
+
+            ),
+            child: Center(
+              child: imageUrl == " " ? const Icon(
+                Icons.person, size: 80, color: Colors.white,
+              ): Image.network(imageUrl),
+            ),
+          ),
         ),
+
         const SizedBox(
           width: 20,
         ),

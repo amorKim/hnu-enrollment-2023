@@ -20,6 +20,7 @@ class Student {
   final List<Enrollment>? enrollments;
   final Map? assessment;
 
+
   const Student({
     required this.userId,
     required this.studId,
@@ -34,6 +35,7 @@ class Student {
     this.maxUnit,
     this.enrollments,
     this.assessment,
+
   });
 
   Student.fromSnapshot(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
@@ -51,4 +53,7 @@ class Student {
         maxUnit = snapshot.data()[studentMaxUnitFieldName],
         enrollments = snapshot.data()[enrollmentsCollectionName],
         assessment = snapshot.data()[assessmentsCollectionName];
+
+
+
 }
