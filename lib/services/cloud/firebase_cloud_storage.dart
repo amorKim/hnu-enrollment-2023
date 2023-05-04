@@ -149,7 +149,7 @@ class FirebaseCloudStorage {
     }
 
     // Add a new enrollment collection
-    final enrollmentDocRef = await enrollments.add({
+    await enrollments.add({
       enrollmentUserIdFieldName: userId,
       enrollmentStudentIdFieldName: student.studId,
       enrollmentCourseIdFieldName: courseId,

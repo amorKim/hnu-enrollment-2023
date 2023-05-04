@@ -4,6 +4,9 @@ import 'package:hnu_mis_announcement/drawer/myinfomation.dart';
 import 'package:hnu_mis_announcement/drawer/updateAddress.dart';
 import 'package:hnu_mis_announcement/drawer/updateContactNum.dart';
 import 'package:hnu_mis_announcement/services/auth/auth_service.dart';
+import 'package:hnu_mis_announcement/services/auth/auth_user.dart';
+import 'package:hnu_mis_announcement/services/cloud/firebase_cloud_storage.dart';
+import 'package:hnu_mis_announcement/services/cloud/student.dart';
 import 'package:hnu_mis_announcement/utilities/dialogs/logout_dialog.dart';
 import 'package:hnu_mis_announcement/views/constants/route.dart';
 
@@ -15,79 +18,97 @@ class MyDrawer extends StatefulWidget {
 }
 
 class _MyDrawerState extends State<MyDrawer> {
+  AuthUser? get user => AuthService.firebase().currentUser;
+  late final String userId;
+  late final String email;
+
+  late final FirebaseCloudStorage _enrollmentService;
+
+  @override
+  void initState() {
+    super.initState();
+    _enrollmentService = FirebaseCloudStorage();
+    userId = user!.id;
+    email = user!.email;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: Material(
-        color: Colors.white30,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(10.0, 60, 10, 0),
-          child: Column(
-            children: [
-              headerWidget(),
-              const SizedBox(
-                height: 30,
+    return FutureBuilder(
+        future: _enrollmentService.getStudent(ownerUserId: userId),
+        builder: (context, student) {
+          return Drawer(
+            child: Material(
+              color: Colors.white30,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(10.0, 60, 10, 0),
+                child: Column(
+                  children: [
+                    headerWidget(student.data),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    const Divider(
+                      thickness: 1,
+                      height: 15,
+                      color: Colors.grey,
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    DrawerItems(
+                      name: 'My Information',
+                      icon: Icons.article_outlined,
+                      onPressed: () => onItemPressed(context, index: 0),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    DrawerItems(
+                      name: 'Update Address',
+                      icon: Icons.location_city,
+                      onPressed: () => onItemPressed(context, index: 1),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    DrawerItems(
+                      name: 'Update Contact Number',
+                      icon: Icons.contact_phone_outlined,
+                      onPressed: () => onItemPressed(context, index: 2),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Divider(
+                      thickness: 1,
+                      height: 15,
+                      color: Colors.grey,
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    DrawerItems(
+                      name: 'Log Out',
+                      icon: Icons.logout,
+                      onPressed: () async {
+                        final shouldLogout = await showLogOutDialog(context);
+                        if (shouldLogout) {
+                          await AuthService.firebase().logout();
+                          if (!mounted) return;
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                            loginRoute,
+                            (_) => false,
+                          );
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ),
-              const Divider(
-                thickness: 1,
-                height: 15,
-                color: Colors.grey,
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              DrawerItems(
-                name: 'My Information',
-                icon: Icons.article_outlined,
-                onPressed: () => onItemPressed(context, index: 0),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              DrawerItems(
-                name: 'Update Address',
-                icon: Icons.location_city,
-                onPressed: () => onItemPressed(context, index: 1),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              DrawerItems(
-                name: 'Update Contact Number',
-                icon: Icons.contact_phone_outlined,
-                onPressed: () => onItemPressed(context, index: 2),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Divider(
-                thickness: 1,
-                height: 15,
-                color: Colors.grey,
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              DrawerItems(
-                name: 'Log Out',
-                icon: Icons.logout,
-                onPressed: () async {
-                  final shouldLogout = await showLogOutDialog(context);
-                  if (shouldLogout) {
-                    await AuthService.firebase().logout();
-                    if (!mounted) return;
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                      loginRoute,
-                      (_) => false,
-                    );
-                  }
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
+        });
   }
 
   void onItemPressed(BuildContext context, {required int index}) {
@@ -109,7 +130,10 @@ class _MyDrawerState extends State<MyDrawer> {
     }
   }
 
-  Widget headerWidget() {
+  Widget headerWidget(Student? student) {
+    final String? fName = student?.fName;
+    final String? lName = student?.lName;
+    final String? mName = student?.mName;
     const img = 'assets/Kimberly Amor.jpg';
     return Column(
       children: [
@@ -122,28 +146,24 @@ class _MyDrawerState extends State<MyDrawer> {
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
-            SizedBox(
+          children: [
+            const SizedBox(
               height: 10,
             ),
             Text(
-              'Kimberly Amor',
-              style: TextStyle(fontSize: 16, color: Colors.black),
+              '$lName, $fName $mName',
+              style: const TextStyle(fontSize: 16, color: Colors.black),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Text(
-              'amor.kimberly@hnu.edu.ph',
-              style: TextStyle(fontSize: 16, color: Colors.black),
+              email,
+              style: const TextStyle(fontSize: 16, color: Colors.black),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            Text(
-              'Roman Catholic',
-              style: TextStyle(fontSize: 16, color: Colors.black),
-            )
           ],
         )
       ],
