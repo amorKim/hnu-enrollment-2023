@@ -32,7 +32,7 @@ dependencies:
   flutter:
     sdk: flutter
   select_form_field: "^2.2.0"
-
+  image_picker: ^0.8.4+2
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -43,6 +43,8 @@ dependencies:
   cloud_firestore: ^4.5.1
   firebase_analytics: ^10.2.0
   intl: ^0.17.0
+  firebase_storage: ^11.1.1
+  horizontal_data_table: ^4.2.0
 
 dev_dependencies:
   flutter_test:
@@ -80,6 +82,8 @@ flutter:
      - assets/hnu_logo.png
      - assets/noclasses.jpg
      - assets/hagit_sa_semana_santa2023.jpg
+     - assets/verify email.png
+     - assets/email_verification.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

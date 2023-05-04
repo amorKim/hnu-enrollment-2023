@@ -14,6 +14,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   late final TextEditingController _email;
   late final TextEditingController _password;
+  bool _obscureText = true;
 
   @override
   void initState() {
@@ -63,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                   padding: const EdgeInsets.all(10),
                   child: const Text(
                     'Sign in',
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                   )),
               Container(
                 padding: const EdgeInsets.all(10),
@@ -78,27 +79,41 @@ class _LoginPageState extends State<LoginPage> {
               Container(
                 padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                 child: TextField(
-                  obscureText: true,
+                  obscureText: _obscureText,
                   controller: _password,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
                     labelText: 'Password',
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscureText ? Icons.visibility : Icons.visibility_off,
+                        color: Colors.grey,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscureText = !_obscureText;
+                        }
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
+
               TextButton(
                 onPressed: () {
                   //forgot password screen
                 },
                 child: const Text(
                   'Forgot Password',
+                  style: TextStyle(fontSize: 15),
                 ),
               ),
               Container(
                   height: 50,
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: ElevatedButton(
-                    child: const Text('Login'),
+                    child: const Text('Login', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
                     onPressed: () async {
                       final email = _email.text;
                       final password = _password.text;
@@ -107,7 +122,6 @@ class _LoginPageState extends State<LoginPage> {
                           email: email,
                           password: password,
                         );
-
                         final user = AuthService.firebase().currentUser;
                         if (user?.isEmailVerified ?? false) {
                           // user's email is verified
@@ -132,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
                       } on WrongPasswordAuthException {
                         await showErrorDialog(
                           context,
-                          'Wrong credentials',
+                          'Wrong password',
                         );
                       } on GenericAuthException {
                         await showErrorDialog(
@@ -145,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  const Text('Does not have account?'),
+                  const Text("Don't have an account yet?",style: TextStyle(fontSize: 15),),
                   TextButton(
                     child: const Text(
                       'Sign in',

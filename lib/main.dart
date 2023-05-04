@@ -49,7 +49,6 @@ class LandingPage extends StatelessWidget {
             } else {
               return const LoginPage();
             }
-
           default:
             return const CircularProgressIndicator();
         }
@@ -107,6 +106,7 @@ class Financial {
   final String course;
   final int loadunits;
   final int payunits;
+
   double get total => payunits * 752.0;
 
   Financial({
@@ -115,3 +115,5 @@ class Financial {
     required this.payunits,
   });
 }
+
+
