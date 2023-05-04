@@ -62,6 +62,18 @@ class FirebaseCloudStorage {
       .snapshots()
       .map((event) => event.docs.map((doc) => Course.fromSnapshot(doc)));
 
+  //get all enrollments
+  Stream<Iterable<Enrollment>> allEnrollmentsOfStudent(
+          {required String userId}) =>
+      enrollments
+          .where(
+            ownerUserIdFieldName,
+            isEqualTo: userId,
+          )
+          .snapshots()
+          .map(
+              (event) => event.docs.map((doc) => Enrollment.fromSnapshot(doc)));
+
   //register student
   Future<Student> createNewStudent({
     required String userId,
@@ -115,8 +127,9 @@ class FirebaseCloudStorage {
     required String courseCode,
     required String courseName,
     required Map<String, dynamic> courseSchedule,
+    required Map<String, dynamic>? courseScheduleLab,
   }) async {
-    // Get the student and course documents
+    // Get the student document
     final student = await getStudent(ownerUserId: userId);
 
     final enrollmentDocs =
@@ -136,11 +149,13 @@ class FirebaseCloudStorage {
     }
 
     // Add a new enrollment collection
-    final enrollmentDocRef = await enrollments.add({
+    await enrollments.add({
+      enrollmentUserIdFieldName: userId,
       enrollmentStudentIdFieldName: student.studId,
       enrollmentCourseIdFieldName: courseId,
       enrollmentCourseCodeFieldName: courseCode,
       enrollmentCourseScheduleFieldName: courseSchedule,
+      enrollmentCourseScheduleLabFieldName: courseScheduleLab,
       enrollmentEnrollAtFieldName: Timestamp.now(),
       enrollmentStudentGradeFieldName: null,
     });
