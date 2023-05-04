@@ -134,12 +134,13 @@ class _MyDrawerState extends State<MyDrawer> {
     final String? fName = student?.fName;
     final String? lName = student?.lName;
     final String? mName = student?.mName;
-    const img = 'assets/Kimberly Amor.jpg';
+    const img =
+        'https://icon-library.com/images/default-profile-icon/default-profile-icon-6.jpg';
     return Column(
       children: [
         const CircleAvatar(
           radius: 40,
-          backgroundImage: AssetImage(img),
+          backgroundImage: NetworkImage(img),
         ),
         const SizedBox(
           width: 20,
