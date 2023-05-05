@@ -19,6 +19,8 @@ class Student {
   final int? maxUnit;
   final List<Enrollment>? enrollments;
   final Map? assessment;
+  final String? imageUrl;
+
 
 
   const Student({
@@ -35,6 +37,9 @@ class Student {
     this.maxUnit,
     this.enrollments,
     this.assessment,
+    this.imageUrl,
+
+
 
   });
 
@@ -52,8 +57,7 @@ class Student {
         unitsTaken = snapshot.data()[studentUnitsTakenFieldName],
         maxUnit = snapshot.data()[studentMaxUnitFieldName],
         enrollments = snapshot.data()[enrollmentsCollectionName],
-        assessment = snapshot.data()[assessmentsCollectionName];
-
-
+        assessment = snapshot.data()[assessmentsCollectionName],
+        imageUrl = snapshot.data()[studentImageUrlFieldName];
 
 }

@@ -15,6 +15,7 @@ const String studentUnitsTakenFieldName = "units_taken";
 const String studentMaxUnitFieldName = "max_unit";
 const String enrollmentsCollectionName = "enrollments";
 const String assessmentsCollectionName = "assessments";
+const String studentImageUrlFieldName = "imageUrl";
 
 // Enrollment entity fields
 const String enrollmentIdFieldName = 'enroll_id';

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:hnu_mis_announcement/drawer/drawerItem.dart';
@@ -22,13 +23,14 @@ class MyDrawer extends StatefulWidget {
 }
 
 class _MyDrawerState extends State<MyDrawer> {
+
   AuthUser? get user => AuthService.firebase().currentUser;
   late final String userId;
   late final String email;
 
   late final FirebaseCloudStorage _enrollmentService;
 
-  String imageUrl = " ";
+  File? imageUrl;
 
   @override
   void initState() {
@@ -37,25 +39,80 @@ class _MyDrawerState extends State<MyDrawer> {
     userId = user!.id;
     email = user!.email;
   }
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await ImagePicker().pickImage(source: source);
 
-  void pickUploadImage() async {
-    final image = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-      maxHeight: 512,
-      maxWidth: 512,
-      imageQuality: 75,
-    );
-
-    Reference ref = FirebaseStorage.instance.ref().child('profilepic.jpg');
-
-    await ref.putFile(File(image!.path));
-    ref.getDownloadURL().then((value) {
-      print(value);
-      setState(() {
-        imageUrl = value;
-      });
+    setState(() {
+      imageUrl = File(pickedFile!.path);
     });
   }
+
+  void _showPickImageDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Pick an image'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                GestureDetector(
+                  child: const Text('Pick from gallery'),
+                  onTap: () {
+                    _pickImage(ImageSource.gallery);
+                    Navigator.of(context).pop();
+                  },
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                ),
+                GestureDetector(
+                  child: const Text('Take a picture'),
+                  onTap: () {
+                    _pickImage(ImageSource.camera);
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<String> _uploadImage() async {
+    final ref = FirebaseStorage.instance
+        .ref()
+        .child('students/${DateTime.now().millisecondsSinceEpoch}.jpg');
+
+    final task = ref.putFile(imageUrl!);
+
+    final snapshot = await task.whenComplete(() {});
+
+    final urlDownload = await snapshot.ref.getDownloadURL();
+
+    return urlDownload.toString();
+  }
+
+  Future<void> _saveProfilePicture() async {
+    final urlDownload = await _uploadImage();
+    print('urlDownload: $urlDownload');
+    print('userId: $userId');
+    final studentRef = FirebaseFirestore.instance.collection('students').doc(userId);
+    try {
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        DocumentSnapshot studentSnapshot = await transaction.get(studentRef);
+        if (studentSnapshot.exists) {
+          await transaction.update(studentRef, {'imageUrl': urlDownload});
+        }
+      });
+      print('Update successful');
+    } catch (e) {
+      print('Error updating image: $e');
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -165,25 +222,55 @@ class _MyDrawerState extends State<MyDrawer> {
       children: [
 
         GestureDetector(
-          onTap: (){
-            pickUploadImage();
-          },
-          child: Container(
-            margin: const EdgeInsets.only(top: 20),
-            width: 120,
-            height: 120,
-            alignment: Alignment.bottomCenter,
-            decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(100)),
-                color: Colors.green
+        onTap: () {
+        _showPickImageDialog(context);
+    },
+          child: Stack(
+           children: [
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+              width: 120,
+              height: 120,
+              decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(100)),
+              color: Colors.green,
+            ),
+          child: ClipOval(
+          child: imageUrl != null
+            ? Image.file(
+            imageUrl!,
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: double.infinity,
+          )
+                : const Center(
+               child: Icon(Icons.person,
+               size: 50,
+               color: Colors.white,),
+        ),
+      ),
+      ),
 
-            ),
-            child: Center(
-              child: imageUrl == " " ? const Icon(
-                Icons.person, size: 80, color: Colors.white,
-              ): Image.network(imageUrl),
-            ),
+        Positioned(
+          bottom: 0,
+          right: 0,
+          child: Container(
+          width: 40,
+          height: 40,
+          decoration: const BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.circle,
           ),
+          child: const Icon(Icons.camera_alt),
+          ),
+          ),
+          ],
+          ),
+        ),
+
+        TextButton(
+          onPressed: _saveProfilePicture,
+          child: const Text('Save Profile Picture'),
         ),
 
         const SizedBox(

@@ -12,10 +12,9 @@ class FirebaseCloudStorage {
   final courses = FirebaseFirestore.instance.collection('courses_it');
   final enrollments = FirebaseFirestore.instance.collection('Enrollments');
 
-  bool _hasScheduleConflict(
-    Map<String, dynamic> schedule1,
-    Map<String, dynamic> schedule2,
-  ) {
+
+  bool _hasScheduleConflict(Map<String, dynamic> schedule1,
+      Map<String, dynamic> schedule2,) {
     // If the schedules are on different days, there is no conflict
     if (schedule1['days'] != schedule2['days']) {
       return false;
@@ -44,9 +43,9 @@ class FirebaseCloudStorage {
     try {
       final querySnapshot = await students
           .where(
-            ownerUserIdFieldName,
-            isEqualTo: ownerUserId,
-          )
+        ownerUserIdFieldName,
+        isEqualTo: ownerUserId,
+      )
           .get();
       if (querySnapshot.docs.isEmpty) {
         throw StudentNotFoundException();
@@ -58,18 +57,19 @@ class FirebaseCloudStorage {
   }
 
   //get all course offered
-  Stream<Iterable<Course>> allCourses() => courses
-      .snapshots()
-      .map((event) => event.docs.map((doc) => Course.fromSnapshot(doc)));
+  Stream<Iterable<Course>> allCourses() =>
+      courses
+          .snapshots()
+          .map((event) => event.docs.map((doc) => Course.fromSnapshot(doc)));
 
   //get all enrollments
   Stream<Iterable<Enrollment>> allEnrollmentsOfStudent(
-          {required String userId}) =>
+      {required String userId}) =>
       enrollments
           .where(
-            ownerUserIdFieldName,
-            isEqualTo: userId,
-          )
+        ownerUserIdFieldName,
+        isEqualTo: userId,
+      )
           .snapshots()
           .map(
               (event) => event.docs.map((doc) => Enrollment.fromSnapshot(doc)));
@@ -134,14 +134,14 @@ class FirebaseCloudStorage {
     final student = await getStudent(ownerUserId: userId);
 
     final enrollmentDocs =
-        await enrollments.where('student_id', isEqualTo: student.studId).get();
+    await enrollments.where('student_id', isEqualTo: student.studId).get();
     final enrolledCourses = enrollmentDocs.docs.map((doc) => doc.id).toList();
 
     for (final enrolledCourseId in enrolledCourses) {
       final enrolledCourseDocRef = enrollments.doc(enrolledCourseId);
       final enrolledCourseDoc = await enrolledCourseDocRef.get();
       final Map<String, dynamic> enrolledCourseSchedule =
-          enrolledCourseDoc.data()?['schedule'];
+      enrolledCourseDoc.data()?['schedule'];
 
       // Check for conflicting schedule
       if (_hasScheduleConflict(enrolledCourseSchedule, courseSchedule)) {
@@ -169,7 +169,12 @@ class FirebaseCloudStorage {
   }
 
   static final FirebaseCloudStorage _shared =
-      FirebaseCloudStorage._sharedInstance();
   FirebaseCloudStorage._sharedInstance();
+
+  FirebaseCloudStorage._sharedInstance();
+
   factory FirebaseCloudStorage() => _shared;
-}
+
+
+  }
+
