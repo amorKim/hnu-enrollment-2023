@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hnu_mis_announcement/services/cloud/enrollment.dart';
+import 'package:hnu_mis_announcement/utilities/dialogs/unenroll_dialog.dart';
 
 typedef EnrollmentCallback = void Function(Enrollment enrollment);
 
@@ -19,8 +20,9 @@ class EnrolledCoursesListView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const SizedBox(height: 20),
-        const Text("ENROLLED COURSES",
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+        const Text(
+          "ENROLLED COURSES",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 10),
         Expanded(
@@ -37,7 +39,10 @@ class EnrolledCoursesListView extends StatelessWidget {
                 ),
                 trailing: IconButton(
                   onPressed: () async {
-                    onUnEnroll(enrollment);
+                    final shouldUnEnroll = await showUnEnrollDialog(context);
+                    if (shouldUnEnroll) {
+                      onUnEnroll(enrollment);
+                    }
                   },
                   icon: const Icon(Icons.delete),
                 ),

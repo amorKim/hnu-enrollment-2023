@@ -6,9 +6,10 @@ typedef CourseCallback = void Function(Course course);
 class CoursesListView extends StatelessWidget {
   final Iterable<Course> courses;
   final CourseCallback onEnrollCourse;
-
+  final BuildContext context;
   const CoursesListView({
     super.key,
+    required this.context,
     required this.courses,
     required this.onEnrollCourse,
   });
@@ -19,7 +20,8 @@ class CoursesListView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const SizedBox(height: 20),
-        const Text("COURSE OFFERINGS",
+        const Text(
+          "COURSE OFFERINGS",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 10),
