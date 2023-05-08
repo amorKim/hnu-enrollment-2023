@@ -5,11 +5,13 @@ import 'package:hnu_mis_announcement/services/cloud/cloud_storage_exceptions.dar
 import 'package:hnu_mis_announcement/services/cloud/course.dart';
 import 'package:hnu_mis_announcement/services/cloud/enrollment.dart';
 import 'package:hnu_mis_announcement/services/cloud/student.dart';
+import 'package:hnu_mis_announcement/utilities/dialogs/conflict_dialog.dart';
 import 'package:intl/intl.dart';
 
 class FirebaseCloudStorage {
   final students = FirebaseFirestore.instance.collection('students');
-  final courses = FirebaseFirestore.instance.collection('courses_it');
+  final coursesIt = FirebaseFirestore.instance.collection('courses_it');
+  final coursesCs = FirebaseFirestore.instance.collection('courses_cs');
   final enrollments = FirebaseFirestore.instance.collection('Enrollments');
 
   bool _hasScheduleConflict(
@@ -58,9 +60,20 @@ class FirebaseCloudStorage {
   }
 
   //get all course offered
-  Stream<Iterable<Course>> allCourses() => courses
-      .snapshots()
-      .map((event) => event.docs.map((doc) => Course.fromSnapshot(doc)));
+  Stream<Iterable<Course>>? allCourses(
+      {required AsyncSnapshot<Student> student}) {
+    if (student.hasData) {
+      switch (student.data!.program) {
+        case 'BSIT':
+          return coursesIt.snapshots().map(
+              (event) => event.docs.map((doc) => Course.fromSnapshot(doc)));
+        case 'BSCS':
+          return coursesCs.snapshots().map(
+              (event) => event.docs.map((doc) => Course.fromSnapshot(doc)));
+      }
+    }
+    return null;
+  }
 
   //get all enrollments
   Stream<Iterable<Enrollment>> allEnrollmentsOfStudent(
@@ -121,7 +134,9 @@ class FirebaseCloudStorage {
     );
   }
 
+  //enroll course
   Future<void> enrollStudentToCourse({
+    required BuildContext context,
     required String userId,
     required String courseId,
     required String courseCode,
@@ -144,6 +159,9 @@ class FirebaseCloudStorage {
 
       // Check for conflicting schedule
       if (_hasScheduleConflict(enrolledCourseSchedule, courseSchedule)) {
+        if (context.mounted) {
+          await showConflictDialog(context);
+        }
         throw 'Cannot enroll in $courseId due to conflicting schedule with enrolled course $enrolledCourseId';
       }
     }
@@ -159,17 +177,12 @@ class FirebaseCloudStorage {
       enrollmentEnrollAtFieldName: Timestamp.now(),
       enrollmentStudentGradeFieldName: null,
     });
+  }
 
-    // Add a new enrollment sub-map to the course document
-    //   final enrollmentId = await enrollmentDocRef.get();
-    //   final enrollmentData = {
-    //     'enrollmentId': enrollmentId,
-    //     'studentId': student.studId,
-    //     'studentGrade': null,
-    //   };
-    //   await courseDocRef.update({
-    //     'enrollments': FieldValue.arrayUnion([enrollmentData]),
-    //   });
+  void unEnroll(String documentId) async {
+    final enrollmentsDocRef = enrollments.doc(documentId);
+    //delete course
+    enrollmentsDocRef.delete();
   }
 
   static final FirebaseCloudStorage _shared =

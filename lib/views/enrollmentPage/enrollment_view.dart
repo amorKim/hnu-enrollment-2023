@@ -31,37 +31,43 @@ class _EnrollmentViewState extends State<EnrollmentView> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        StreamBuilder(
-          stream: _enrollmentService.allCourses(),
-          builder: (context, snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.waiting:
-              case ConnectionState.active:
-                if (snapshot.hasData) {
-                  final allCourses = snapshot.data as Iterable<Course>;
-                  return Expanded(
-                    child: CoursesListView(
-                      courses: allCourses,
-                      onEnrollCourse: (course) async {
-                        await _enrollmentService.enrollStudentToCourse(
-                          userId: userId,
-                          courseId: course.documentId,
-                          courseCode: course.courseCode,
-                          courseName: course.courseName,
-                          courseSchedule: course.schedule,
-                          courseScheduleLab: course.scheduleLab,
+        FutureBuilder(
+            future: _enrollmentService.getStudent(ownerUserId: userId),
+            builder: (context, student) {
+              return StreamBuilder(
+                stream: _enrollmentService.allCourses(student: student),
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting:
+                    case ConnectionState.active:
+                      if (snapshot.hasData) {
+                        final allCourses = snapshot.data as Iterable<Course>;
+                        return Expanded(
+                          child: CoursesListView(
+                            context: context,
+                            courses: allCourses,
+                            onEnrollCourse: (course) async {
+                              await _enrollmentService.enrollStudentToCourse(
+                                context: context,
+                                userId: userId,
+                                courseId: course.documentId,
+                                courseCode: course.courseCode,
+                                courseName: course.courseName,
+                                courseSchedule: course.schedule,
+                                courseScheduleLab: course.scheduleLab,
+                              );
+                            },
+                          ),
                         );
-                      },
-                    ),
-                  );
-                } else {
-                  return const CircularProgressIndicator();
-                }
-              default:
-                return const CircularProgressIndicator();
-            }
-          },
-        ),
+                      } else {
+                        return const CircularProgressIndicator();
+                      }
+                    default:
+                      return const CircularProgressIndicator();
+                  }
+                },
+              );
+            }),
         const SizedBox(height: 16), // add some spacing between the streams
         StreamBuilder(
           stream: _enrollmentService.allEnrollmentsOfStudent(userId: userId),
@@ -75,7 +81,7 @@ class _EnrollmentViewState extends State<EnrollmentView> {
                     child: EnrolledCoursesListView(
                       enrollments: allEnrollments,
                       onUnEnroll: (enrollment) {
-                        print(enrollment.toString());
+                        _enrollmentService.unEnroll(enrollment.documentId);
                       },
                     ),
                   );
