@@ -50,7 +50,6 @@ class _MyDrawerState extends State<MyDrawer> {
 
     await ref.putFile(File(image!.path));
     ref.getDownloadURL().then((value) {
-      print(value);
       setState(() {
         imageUrl = value;
       });
@@ -123,7 +122,7 @@ class _MyDrawerState extends State<MyDrawer> {
                           if (!mounted) return;
                           Navigator.of(context).pushNamedAndRemoveUntil(
                             loginRoute,
-                                (_) => false,
+                            (_) => false,
                           );
                         }
                       },
@@ -163,9 +162,8 @@ class _MyDrawerState extends State<MyDrawer> {
     //'https://icon-library.com/images/default-profile-icon/default-profile-icon-6.jpg';
     return Column(
       children: [
-
         GestureDetector(
-          onTap: (){
+          onTap: () {
             pickUploadImage();
           },
           child: Container(
@@ -175,17 +173,18 @@ class _MyDrawerState extends State<MyDrawer> {
             alignment: Alignment.bottomCenter,
             decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(100)),
-                color: Colors.green
-
-            ),
+                color: Colors.green),
             child: Center(
-              child: imageUrl == " " ? const Icon(
-                Icons.person, size: 80, color: Colors.white,
-              ): Image.network(imageUrl),
+              child: imageUrl == " "
+                  ? const Icon(
+                      Icons.person,
+                      size: 80,
+                      color: Colors.white,
+                    )
+                  : Image.network(imageUrl),
             ),
           ),
         ),
-
         const SizedBox(
           width: 20,
         ),
