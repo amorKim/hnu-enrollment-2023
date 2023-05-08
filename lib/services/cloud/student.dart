@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:hnu_mis_announcement/services/cloud/assesment.dart';
 import 'package:hnu_mis_announcement/services/cloud/cloud_storage_constants.dart';
 import 'package:hnu_mis_announcement/services/cloud/enrollment.dart';
 
@@ -20,7 +19,6 @@ class Student {
   final List<Enrollment>? enrollments;
   final Map? assessment;
 
-
   const Student({
     required this.userId,
     required this.studId,
@@ -35,7 +33,6 @@ class Student {
     this.maxUnit,
     this.enrollments,
     this.assessment,
-
   });
 
   Student.fromSnapshot(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
@@ -53,7 +50,4 @@ class Student {
         maxUnit = snapshot.data()[studentMaxUnitFieldName],
         enrollments = snapshot.data()[enrollmentsCollectionName],
         assessment = snapshot.data()[assessmentsCollectionName];
-
-
-
 }
