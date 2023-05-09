@@ -60,4 +60,8 @@ class Student {
         assessment = snapshot.data()[assessmentsCollectionName],
         imageUrl = snapshot.data()[studentImageUrlFieldName];
 
+
+
+
+
 }

@@ -24,6 +24,8 @@ class MyDrawer extends StatefulWidget {
 
 class _MyDrawerState extends State<MyDrawer> {
 
+
+
   AuthUser? get user => AuthService.firebase().currentUser;
   late final String userId;
   late final String email;
@@ -31,6 +33,7 @@ class _MyDrawerState extends State<MyDrawer> {
   late final FirebaseCloudStorage _enrollmentService;
 
   File? imageUrl;
+
 
   @override
   void initState() {
@@ -95,16 +98,19 @@ class _MyDrawerState extends State<MyDrawer> {
     return urlDownload.toString();
   }
 
-  Future<void> _saveProfilePicture() async {
+  Future<void> _saveProfilePicture(Student? student) async {
+final String? documentId = student?.studId;
     final urlDownload = await _uploadImage();
     print('urlDownload: $urlDownload');
-    print('userId: $userId');
-    final studentRef = FirebaseFirestore.instance.collection('students').doc(userId);
+    print('studentId: $documentId');
+    final studentRef = FirebaseFirestore.instance.collection('students').doc(documentId as String);
+     
     try {
       await FirebaseFirestore.instance.runTransaction((transaction) async {
         DocumentSnapshot studentSnapshot = await transaction.get(studentRef);
         if (studentSnapshot.exists) {
-          await transaction.update(studentRef, {'imageUrl': urlDownload});
+          await studentRef.update({'imageUrl': urlDownload});
+           // transaction.update(studentRef, {'imageUrl': urlDownload});
         }
       });
       print('Update successful');
@@ -235,63 +241,66 @@ class _MyDrawerState extends State<MyDrawer> {
               borderRadius: BorderRadius.all(Radius.circular(100)),
               color: Colors.green,
             ),
-          child: ClipOval(
-          child: imageUrl != null
-            ? Image.file(
-            imageUrl!,
-          fit: BoxFit.cover,
-          width: double.infinity,
-          height: double.infinity,
-          )
+              child: ClipOval(
+              child: imageUrl != null
+                ? Image.file(
+                imageUrl!,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity,
+                )
                 : const Center(
-               child: Icon(Icons.person,
-               size: 50,
-               color: Colors.white,),
+                 child: Icon(Icons.person,
+                 size: 50,
+                 color: Colors.white,),
         ),
       ),
       ),
 
-        Positioned(
-          bottom: 0,
-          right: 0,
-          child: Container(
-          width: 40,
-          height: 40,
-          decoration: const BoxDecoration(
-          color: Colors.white,
-          shape: BoxShape.circle,
-          ),
-          child: const Icon(Icons.camera_alt),
-          ),
-          ),
-          ],
-          ),
+            Positioned(
+            bottom: 0,
+            right: 0,
+            child: Container(
+            width: 40,
+            height: 40,
+            decoration: const BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.circle,
+            ),
+            child: const Icon(Icons.camera_alt),
+            ),
+            ),
+            ],
+            ),
         ),
 
         TextButton(
-          onPressed: _saveProfilePicture,
+          onPressed: (){
+            _saveProfilePicture(student);
+        },
           child: const Text('Save Profile Picture'),
-        ),
+    ),
 
-        const SizedBox(
-          width: 20,
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-              '$lName, $fName $mName',
-              style: const TextStyle(fontSize: 16, color: Colors.black),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-              email,
-              style: const TextStyle(fontSize: 16, color: Colors.black),
+    const SizedBox(
+    width: 20,
+    ),
+    Column(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+    const SizedBox(
+    height: 10,
+    ),
+    Text(
+    '$lName, $fName $mName',
+    style: const TextStyle(fontSize: 16, color: Colors.black),
+    ),
+    const SizedBox(
+    height: 10,
+    ),
+    Text(
+    email,
+    style: const TextStyle(fontSize: 16, color
+    : Colors.black),
             ),
             const SizedBox(
               height: 10,
