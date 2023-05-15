@@ -7,7 +7,7 @@ class My_Info extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("My Information"),
+        title: const Text("Status"),
         centerTitle: true,
 
       ),
