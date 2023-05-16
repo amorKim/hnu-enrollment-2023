@@ -115,5 +115,3 @@ class Financial {
     required this.payunits,
   });
 }
-
-
