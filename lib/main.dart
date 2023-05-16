@@ -68,7 +68,7 @@ class _DashboardPageState extends State<DashboardPage> {
   int _currentIndex = 0;
   final List<Widget> _children = [
     const HomePage(),
-    const FinancialsPage(),
+    FinancialsPage(),
     const AcademicsPage(),
   ];
 
