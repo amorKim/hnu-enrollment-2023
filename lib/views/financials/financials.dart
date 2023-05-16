@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class Financial {
   final String course;
   final int loadunits;
@@ -14,7 +13,7 @@ class Financial {
   });
 }
 
-class MyApp extends StatelessWidget {
+class FinancialsPage extends StatelessWidget {
   final List<Financial> persons = [
     Financial(course: 'CCS 106', loadunits: 3, payunits: 5),
     Financial(course: 'IAS 101A', loadunits: 3, payunits: 5),
@@ -26,18 +25,19 @@ class MyApp extends StatelessWidget {
     Financial(course: 'GEC RIZAL', loadunits: 3, payunits: 3),
   ];
 
-  MyApp({super.key});
+  FinancialsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    int totalLoadUnits = persons.map((p) => p.loadunits).reduce((a, b) => a + b);
+    int totalLoadUnits =
+        persons.map((p) => p.loadunits).reduce((a, b) => a + b);
     int totalPayUnits = persons.map((p) => p.payunits).reduce((a, b) => a + b);
     double totalAmount = persons.map((p) => p.total).reduce((a, b) => a + b);
 
-
     List<Financial> filteredPersons =
-    persons.where((p) => p.payunits == 5).toList();
-    double totalAssessment = totalAmount + filteredPersons.length * 2310.66 + 6277.25;
+        persons.where((p) => p.payunits == 5).toList();
+    double totalAssessment =
+        totalAmount + filteredPersons.length * 2310.66 + 6277.25;
 
     return MaterialApp(
       home: Scaffold(
@@ -55,18 +55,22 @@ class MyApp extends StatelessWidget {
                   ],
                   rows: [
                     ...persons.map((person) => DataRow(cells: [
-                      DataCell(Text(person.course)),
-                      DataCell(Text('${person.loadunits}')),
-                      DataCell(Text('${person.payunits}')),
-                      DataCell(Text('₱${person.total.toStringAsFixed(2)}')),
-                    ])),
+                          DataCell(Text(person.course)),
+                          DataCell(Text('${person.loadunits}')),
+                          DataCell(Text('${person.payunits}')),
+                          DataCell(Text('₱${person.total.toStringAsFixed(2)}')),
+                        ])),
                     DataRow(cells: [
                       const DataCell(Text(
-                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),'Total Tuition:')),
+                          style: TextStyle(
+                              fontSize: 13, fontWeight: FontWeight.bold),
+                          'Total Tuition:')),
                       DataCell(Text(totalLoadUnits.toString())),
                       DataCell(Text(totalPayUnits.toString())),
-                      DataCell(Text('₱${totalAmount.toStringAsFixed(2)}',
-                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                      DataCell(Text(
+                        '₱${totalAmount.toStringAsFixed(2)}',
+                        style: const TextStyle(
+                            fontSize: 13, fontWeight: FontWeight.bold),
                       )),
                     ]),
                   ],
@@ -131,10 +135,16 @@ class MyApp extends StatelessWidget {
                       DataCell(Text('₱1564.80')),
                     ]),
                     DataRow(cells: [
-                      DataCell(Text('Total Amount:',
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),)),
-                      DataCell(Text('₱6277.25',
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),)),
+                      DataCell(Text(
+                        'Total Amount:',
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      )),
+                      DataCell(Text(
+                        '₱6277.25',
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      )),
                     ]),
                   ],
                 ),
@@ -146,22 +156,25 @@ class MyApp extends StatelessWidget {
                   ],
                   rows: [
                     ...filteredPersons.map((person) => DataRow(cells: [
-                      DataCell(Text(person.course)),
-                      const DataCell(Text("₱2310.66")),
-                    ])),
+                          DataCell(Text(person.course)),
+                          const DataCell(Text("₱2310.66")),
+                        ])),
                     DataRow(cells: [
                       const DataCell(Text(
-                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 13, fontWeight: FontWeight.bold),
                           'Total lab fee:')),
                       DataCell(Text(
                         '₱${(filteredPersons.length * 2310.66).toStringAsFixed(2)}',
-                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            fontSize: 13, fontWeight: FontWeight.bold),
                       )),
                     ]),
                     DataRow(cells: [
                       const DataCell(Text(
                         'TOTAL ASSESSMENT:',
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
                       )),
                       DataCell(
                         Container(
@@ -169,10 +182,12 @@ class MyApp extends StatelessWidget {
                             color: Colors.green,
                             borderRadius: BorderRadius.circular(5),
                           ),
-                          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 6, horizontal: 12),
                           child: Text(
                             '₱${totalAssessment.toStringAsFixed(2)}',
-                            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
