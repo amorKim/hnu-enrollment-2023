@@ -20,6 +20,7 @@ const String assessmentsCollectionName = "assessments";
 const String enrollmentIdFieldName = 'enroll_id';
 const String enrollmentUserIdFieldName = 'user_id';
 const String enrollmentStudentGradeFieldName = 'stud_grade';
+const String enrollmentCoursePayUnitFieldName = 'pay_units';
 const String enrollmentCourseIdFieldName = 'course_id';
 const String enrollmentCourseCodeFieldName = 'course_code';
 const String enrollmentCourseNameFieldName = 'course_name';

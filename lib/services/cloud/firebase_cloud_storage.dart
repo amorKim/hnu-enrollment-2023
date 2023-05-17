@@ -139,6 +139,7 @@ class FirebaseCloudStorage {
     required BuildContext context,
     required String userId,
     required String courseId,
+    required int payUnit,
     required String courseCode,
     required String courseName,
     required Map<String, dynamic> courseSchedule,
@@ -170,6 +171,7 @@ class FirebaseCloudStorage {
     await enrollments.add({
       enrollmentUserIdFieldName: userId,
       enrollmentStudentIdFieldName: student.studId,
+      enrollmentCoursePayUnitFieldName: payUnit,
       enrollmentCourseIdFieldName: courseId,
       enrollmentCourseCodeFieldName: courseCode,
       enrollmentCourseScheduleFieldName: courseSchedule,

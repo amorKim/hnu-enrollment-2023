@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hnu_mis_announcement/services/auth/auth_service.dart';
+import 'package:hnu_mis_announcement/services/cloud/firebase_cloud_storage.dart';
 
 class Financial {
   final String course;
@@ -14,6 +16,7 @@ class Financial {
 }
 
 class FinancialsPage extends StatelessWidget {
+  String get userId => AuthService.firebase().currentUser!.id;
   final List<Financial> persons = [
     Financial(course: 'CCS 106', loadunits: 3, payunits: 5),
     Financial(course: 'IAS 101A', loadunits: 3, payunits: 5),
@@ -29,9 +32,8 @@ class FinancialsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int totalLoadUnits =
-        persons.map((p) => p.loadunits).reduce((a, b) => a + b);
-    int totalPayUnits = persons.map((p) => p.payunits).reduce((a, b) => a + b);
+    final FirebaseCloudStorage enrollmentService = FirebaseCloudStorage();
+    const int tuitionFee = 752;
     double totalAmount = persons.map((p) => p.total).reduce((a, b) => a + b);
 
     List<Financial> filteredPersons =
@@ -46,35 +48,41 @@ class FinancialsPage extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             child: Column(
               children: [
-                DataTable(
-                  columns: const [
-                    DataColumn(label: Text('Course')),
-                    DataColumn(label: Text('Load units')),
-                    DataColumn(label: Text('Pay units')),
-                    DataColumn(label: Text('Tuition fee')),
-                  ],
-                  rows: [
-                    ...persons.map((person) => DataRow(cells: [
-                          DataCell(Text(person.course)),
-                          DataCell(Text('${person.loadunits}')),
-                          DataCell(Text('${person.payunits}')),
-                          DataCell(Text('₱${person.total.toStringAsFixed(2)}')),
-                        ])),
-                    DataRow(cells: [
-                      const DataCell(Text(
-                          style: TextStyle(
-                              fontSize: 13, fontWeight: FontWeight.bold),
-                          'Total Tuition:')),
-                      DataCell(Text(totalLoadUnits.toString())),
-                      DataCell(Text(totalPayUnits.toString())),
-                      DataCell(Text(
-                        '₱${totalAmount.toStringAsFixed(2)}',
-                        style: const TextStyle(
-                            fontSize: 13, fontWeight: FontWeight.bold),
-                      )),
-                    ]),
-                  ],
-                ),
+                StreamBuilder(
+                    stream: enrollmentService.allEnrollmentsOfStudent(
+                        userId: userId),
+                    builder: (context, enrollments) {
+                      return DataTable(
+                        columns: const [
+                          DataColumn(label: Text('Course')),
+                          DataColumn(label: Text('Pay units')),
+                          DataColumn(label: Text('Tuition fee')),
+                        ],
+                        rows: [
+                          ...?enrollments.data?.map((enrollment) {
+                            int subTuition = enrollment.payUnit * tuitionFee;
+                            return DataRow(cells: [
+                              DataCell(Text(enrollment.courseCode)),
+                              DataCell(Text('${enrollment.payUnit}')),
+                              DataCell(Text('₱$subTuition'))
+                            ]);
+                          }),
+                          DataRow(cells: [
+                            const DataCell(Text(
+                                style: TextStyle(
+                                    fontSize: 13, fontWeight: FontWeight.bold),
+                                'Total Tuition:')),
+                            DataCell(Text(
+                                '${enrollments.data?.map((enrollment) => enrollment.payUnit).reduce((a, b) => a + b)}')),
+                            DataCell(Text(
+                              '₱${enrollments.data?.map((enrollment) => enrollment.payUnit * 752).reduce((a, b) => a + b).toStringAsFixed(2)}',
+                              style: const TextStyle(
+                                  fontSize: 13, fontWeight: FontWeight.bold),
+                            )),
+                          ]),
+                        ],
+                      );
+                    }),
                 const SizedBox(height: 20),
                 DataTable(
                   columns: const [
