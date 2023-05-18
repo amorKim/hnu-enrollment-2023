@@ -2,6 +2,7 @@ const ownerUserIdFieldName = 'user_id';
 const textFieldName = 'text';
 
 // Student entity fields
+const String studentImageUrlFieldName= "imageUrl";
 const String studentStudIdFieldName = "stud_id";
 const String studentUserIdFieldName = "user_id";
 const String studentProgramFieldName = "program";

@@ -24,16 +24,14 @@ class MyDrawer extends StatefulWidget {
 
 class _MyDrawerState extends State<MyDrawer> {
 
-
-
   AuthUser? get user => AuthService.firebase().currentUser;
   late final String userId;
   late final String email;
-
+  //late final Image imageUrl;
   late final FirebaseCloudStorage _enrollmentService;
 
   File? imageUrl;
-
+  late final String? profilePic;
 
   @override
   void initState() {
@@ -41,6 +39,7 @@ class _MyDrawerState extends State<MyDrawer> {
     _enrollmentService = FirebaseCloudStorage();
     userId = user!.id;
     email = user!.email;
+
   }
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await ImagePicker().pickImage(source: source);
@@ -205,7 +204,7 @@ final String? documentId = student?.studId;
     switch (index) {
       case 0:
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const My_Info()));
+            context, MaterialPageRoute(builder: (context) => const MyInfo()));
         break;
       case 1:
         Navigator.push(context,
@@ -222,6 +221,7 @@ final String? documentId = student?.studId;
     final String? fName = student?.fName;
     final String? lName = student?.lName;
     final String? mName = student?.mName;
+    final String? imgUrl = student?.imgUrl;
     //const img =
     //'https://icon-library.com/images/default-profile-icon/default-profile-icon-6.jpg';
     return Column(
@@ -242,32 +242,44 @@ final String? documentId = student?.studId;
               color: Colors.green,
             ),
               child: ClipOval(
-              child: imageUrl != null
-                ? Image.file(
-                imageUrl!,
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: double.infinity,
-                )
-                : const Center(
-                 child: Icon(Icons.person,
-                 size: 50,
-                 color: Colors.white,),
-        ),
-      ),
+    child: imageUrl != null
+    ? Image.file(
+    imageUrl!,
+    fit: BoxFit.cover,
+    width: double.infinity,
+    height: double.infinity,
+    )
+        : (imgUrl != null
+    ? Image.network(
+    imgUrl,
+    fit: BoxFit.cover,
+    width: double.infinity,
+    height: double.infinity,
+    )
+        : Center(
+    child: Icon(
+    Icons.person,
+    size: 50,
+    color: Colors.white,
+    ),
+    )
+    ),
+
+
+    ),
       ),
 
-        Positioned(
+            Positioned(
           bottom: 0,
           right: 0,
-          child: Container(
-          width: 40,
-          height: 40,
-          decoration: const BoxDecoration(
-          color: Colors.white,
-          shape: BoxShape.circle,
-          ),
-          child: const Icon(Icons.camera_alt),
+              child: Container(
+              width: 40,
+              height: 40,
+              decoration: const BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+              ),
+                child: const Icon(Icons.camera_alt),
           ),
           ),
           ],
@@ -281,27 +293,27 @@ final String? documentId = student?.studId;
           child: const Text('Save Profile Picture'),
     ),
 
-    const SizedBox(
-    width: 20,
+      const SizedBox(
+      width: 20,
     ),
-    Column(
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: [
-    const SizedBox(
-    height: 10,
-    ),
-    Text(
-    '$lName, $fName $mName',
-    style: const TextStyle(fontSize: 16, color: Colors.black),
-    ),
-    const SizedBox(
-    height: 10,
-    ),
-    Text(
-    email,
-    style: const TextStyle(fontSize: 16, color
-    : Colors.black),
-            ),
+      Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const SizedBox(
+      height: 10,
+      ),
+        Text(
+      '$lName, $fName $mName',
+      style: const TextStyle(fontSize: 16, color: Colors.black),
+      ),
+        const SizedBox(
+      height: 10,
+      ),
+        Text(
+      email,
+      style: const TextStyle(fontSize: 16, color
+      : Colors.black),
+              ),
             const SizedBox(
               height: 10,
             ),
