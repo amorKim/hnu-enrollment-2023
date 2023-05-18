@@ -204,7 +204,7 @@ final String? documentId = student?.studId;
     switch (index) {
       case 0:
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const My_Info()));
+            context, MaterialPageRoute(builder: (context) => const MyInfo()));
         break;
       case 1:
         Navigator.push(context,
