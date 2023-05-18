@@ -5,6 +5,7 @@ import 'package:hnu_mis_announcement/services/cloud/enrollment.dart';
 
 @immutable
 class Student {
+  final String? imgUrl;
   final String userId;
   final String studId;
   final String program;
@@ -20,6 +21,7 @@ class Student {
   final Map? assessment;
 
   const Student({
+     this.imgUrl,
     required this.userId,
     required this.studId,
     required this.program,
@@ -49,5 +51,6 @@ class Student {
         unitsTaken = snapshot.data()[studentUnitsTakenFieldName],
         maxUnit = snapshot.data()[studentMaxUnitFieldName],
         enrollments = snapshot.data()[enrollmentsCollectionName],
-        assessment = snapshot.data()[assessmentsCollectionName];
+        assessment = snapshot.data()[assessmentsCollectionName],
+  imgUrl = snapshot.data()[studentImageUrlFieldName];
 }
