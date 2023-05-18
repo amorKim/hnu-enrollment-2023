@@ -76,12 +76,28 @@ class FirebaseCloudStorage {
   }
 
   //get all enrollments
-  Stream<Iterable<Enrollment>> allEnrollmentsOfStudent(
+  Stream<Iterable<Enrollment>>? allEnrollmentsOfStudent(
           {required String userId}) =>
       enrollments
           .where(
             ownerUserIdFieldName,
             isEqualTo: userId,
+          )
+          .snapshots()
+          .map(
+              (event) => event.docs.map((doc) => Enrollment.fromSnapshot(doc)));
+
+  //get all enrollments with lab
+  Stream<Iterable<Enrollment>> allEnrollmentsOfStudentWithLab(
+          {required String userId}) =>
+      enrollments
+          .where(
+            ownerUserIdFieldName,
+            isEqualTo: userId,
+          )
+          .where(
+            enrollmentCoursePayUnitFieldName,
+            isEqualTo: 5,
           )
           .snapshots()
           .map(
