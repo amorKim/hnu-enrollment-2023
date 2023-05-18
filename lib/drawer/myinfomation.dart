@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart'; //internationalization and localization support for formatting dates, numbers, currencies, and messages.
 
-import '../services/auth/auth_service.dart';
-import '../services/auth/auth_user.dart';
-import '../services/cloud/firebase_cloud_storage.dart';
-import '../services/cloud/student.dart';
+import '../services/auth/auth_service.dart'; //to use the authentication service
+import '../services/auth/auth_user.dart'; //to access the authentication user class or functionality
+import '../services/cloud/firebase_cloud_storage.dart'; //to utilize the functionality related to Firebase Cloud Storage
+import '../services/cloud/student.dart'; //to utilize the functionality or data related to the "student"
 
 class MyInfo extends StatefulWidget {
   const MyInfo({Key? key}) : super(key: key);
 
   @override
   MyInfoState createState() => MyInfoState();
-}
+} //providing the implementation for creating and managing the state of the widget.
 
 class MyInfoState extends State<MyInfo> {
   AuthUser? get user => AuthService.firebase().currentUser;
@@ -26,7 +26,7 @@ class MyInfoState extends State<MyInfo> {
     _enrollmentService = FirebaseCloudStorage();
     userId = user!.id;
     email = user!.email;
-  }
+  } //to retrieve the current authenticated user
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,7 @@ class MyInfoState extends State<MyInfo> {
         },
       ),
     );
-  }
+  } // displays different UI elements based on the state of the asynchronous snapshot.
 
   Widget information(Student? student) {
     final String? fName = student?.fName;

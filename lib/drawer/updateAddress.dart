@@ -97,4 +97,4 @@ class UpdateAddressState extends State<UpdateAddress> {
     );
   }
 
-}
+} //to display the student's address information and an input field for updating the address.
