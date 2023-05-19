@@ -9,8 +9,9 @@ class Enrollment {
   final Map<String, dynamic>? scheduleLab;
   final String? studGrade;
   final String studentId;
-
+  final int payUnit;
   Enrollment({
+    required this.payUnit,
     required this.documentId,
     required this.courseCode,
     required this.courseId,
@@ -22,6 +23,7 @@ class Enrollment {
 
   Enrollment.fromSnapshot(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
       : documentId = snapshot.id,
+        payUnit = snapshot.data()[enrollmentCoursePayUnitFieldName],
         courseCode = snapshot.data()[enrollmentCourseCodeFieldName],
         courseId = snapshot.data()[enrollmentCourseIdFieldName],
         schedule = snapshot.data()[enrollmentCourseScheduleFieldName],

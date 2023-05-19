@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hnu_mis_announcement/services/auth/auth_service.dart';
-import 'package:hnu_mis_announcement/services/cloud/cloud_storage_constants.dart';
 import 'package:hnu_mis_announcement/services/cloud/course.dart';
 import 'package:hnu_mis_announcement/services/cloud/enrollment.dart';
 import 'package:hnu_mis_announcement/services/cloud/firebase_cloud_storage.dart';
-import 'package:hnu_mis_announcement/services/cloud/student.dart';
-import 'package:hnu_mis_announcement/utilities/dialogs/logout_dialog.dart';
-import 'package:hnu_mis_announcement/views/constants/route.dart';
 import 'package:hnu_mis_announcement/views/enrollmentPage/courses_list_view.dart';
 import 'package:hnu_mis_announcement/views/enrollmentPage/enrolled_courses_list_view.dart';
 
@@ -51,6 +47,7 @@ class _EnrollmentViewState extends State<EnrollmentView> {
                                 context: context,
                                 userId: userId,
                                 courseId: course.documentId,
+                                payUnit: course.payUnit,
                                 courseCode: course.courseCode,
                                 courseName: course.courseName,
                                 courseSchedule: course.schedule,

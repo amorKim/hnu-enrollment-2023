@@ -7,13 +7,12 @@ typedef EnrollmentCallback = void Function(Enrollment enrollment);
 class EnrolledCoursesListView extends StatelessWidget {
   final Iterable<Enrollment> enrollments;
   final EnrollmentCallback onUnEnroll;
-
   const EnrolledCoursesListView({
     super.key,
     required this.enrollments,
     required this.onUnEnroll,
   });
-
+//
   @override
   Widget build(BuildContext context) {
     return Column(
