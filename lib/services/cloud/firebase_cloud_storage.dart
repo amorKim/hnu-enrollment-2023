@@ -150,6 +150,33 @@ class FirebaseCloudStorage {
     );
   }
 
+  //update student personal information
+  Future<void> updateStudent({
+    required String userId,
+    required String? fName,
+    required String lName,
+    String? mName,
+    required DateTime dBirth,
+    required String address,
+    required String contactNum,
+  }) async {
+    final dateBirth = DateTime(
+      dBirth.year,
+      dBirth.month,
+      dBirth.day,
+    );
+    // Get the student document
+    final student = await getStudent(ownerUserId: userId);
+    await students.doc(student.studId).update({
+      studentFNameFieldName: fName,
+      studentLNameFieldName: lName,
+      studentMNameFieldName: mName,
+      studentDBirthFieldName: dateBirth,
+      studentAddressFieldName: address,
+      studentContactNumFieldName: contactNum,
+    });
+  }
+
   //enroll course
   Future<void> enrollStudentToCourse({
     required BuildContext context,

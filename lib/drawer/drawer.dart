@@ -152,20 +152,12 @@ class _MyDrawerState extends State<MyDrawer> {
                       height: 10,
                     ),
                     DrawerItems(
-                      name: 'Update Address',
-                      icon: Icons.location_city,
+                      name: 'Update Information',
+                      icon: Icons.update,
                       onPressed: () => onItemPressed(context, index: 1),
                     ),
                     const SizedBox(
                       height: 10,
-                    ),
-                    DrawerItems(
-                      name: 'Update Contact Number',
-                      icon: Icons.contact_phone_outlined,
-                      onPressed: () => onItemPressed(context, index: 2),
-                    ),
-                    const SizedBox(
-                      height: 20,
                     ),
                     const Divider(
                       thickness: 1,
