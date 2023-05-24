@@ -2,6 +2,7 @@ const ownerUserIdFieldName = 'user_id';
 const textFieldName = 'text';
 
 // Student entity fields
+const String studentImageUrlFieldName= "imageUrl";
 const String studentStudIdFieldName = "stud_id";
 const String studentUserIdFieldName = "user_id";
 const String studentProgramFieldName = "program";
@@ -20,6 +21,7 @@ const String assessmentsCollectionName = "assessments";
 const String enrollmentIdFieldName = 'enroll_id';
 const String enrollmentUserIdFieldName = 'user_id';
 const String enrollmentStudentGradeFieldName = 'stud_grade';
+const String enrollmentCoursePayUnitFieldName = 'pay_units';
 const String enrollmentCourseIdFieldName = 'course_id';
 const String enrollmentCourseCodeFieldName = 'course_code';
 const String enrollmentCourseNameFieldName = 'course_name';

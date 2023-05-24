@@ -76,12 +76,28 @@ class FirebaseCloudStorage {
   }
 
   //get all enrollments
-  Stream<Iterable<Enrollment>> allEnrollmentsOfStudent(
+  Stream<Iterable<Enrollment>>? allEnrollmentsOfStudent(
           {required String userId}) =>
       enrollments
           .where(
             ownerUserIdFieldName,
             isEqualTo: userId,
+          )
+          .snapshots()
+          .map(
+              (event) => event.docs.map((doc) => Enrollment.fromSnapshot(doc)));
+
+  //get all enrollments with lab
+  Stream<Iterable<Enrollment>> allEnrollmentsOfStudentWithLab(
+          {required String userId}) =>
+      enrollments
+          .where(
+            ownerUserIdFieldName,
+            isEqualTo: userId,
+          )
+          .where(
+            enrollmentCoursePayUnitFieldName,
+            isEqualTo: 5,
           )
           .snapshots()
           .map(
@@ -139,6 +155,7 @@ class FirebaseCloudStorage {
     required BuildContext context,
     required String userId,
     required String courseId,
+    required int payUnit,
     required String courseCode,
     required String courseName,
     required Map<String, dynamic> courseSchedule,
@@ -170,6 +187,7 @@ class FirebaseCloudStorage {
     await enrollments.add({
       enrollmentUserIdFieldName: userId,
       enrollmentStudentIdFieldName: student.studId,
+      enrollmentCoursePayUnitFieldName: payUnit,
       enrollmentCourseIdFieldName: courseId,
       enrollmentCourseCodeFieldName: courseCode,
       enrollmentCourseScheduleFieldName: courseSchedule,
