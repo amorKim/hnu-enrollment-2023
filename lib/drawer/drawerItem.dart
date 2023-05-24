@@ -6,20 +6,20 @@ class DrawerItems extends StatelessWidget {
   final String name;
   final IconData icon;
   final Function() onPressed;
-  
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onPressed,
       child: SizedBox(
         height: 40,
-          child: Row(
-            children: [
-              Icon(icon, size: 20, color: Colors.black,),
-              const SizedBox(width: 40,),
-              Text(name, style: const TextStyle(fontSize: 18, color: Colors.black),)
-            ],
-          ),
+        child: Row(
+          children: [
+            Icon(icon, size: 20, color: Colors.black,),
+            const SizedBox(width: 40,),
+            Text(name, style: const TextStyle(fontSize: 18, color: Colors.black),)
+          ],
+        ),
       ),
     );
   }

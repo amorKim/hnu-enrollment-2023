@@ -23,7 +23,6 @@ class MyDrawer extends StatefulWidget {
 }
 
 class _MyDrawerState extends State<MyDrawer> {
-
   AuthUser? get user => AuthService.firebase().currentUser;
   late final String userId;
   late final String email;
@@ -39,8 +38,8 @@ class _MyDrawerState extends State<MyDrawer> {
     _enrollmentService = FirebaseCloudStorage();
     userId = user!.id;
     email = user!.email;
-
   }
+
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await ImagePicker().pickImage(source: source);
 
@@ -98,18 +97,20 @@ class _MyDrawerState extends State<MyDrawer> {
   }
 
   Future<void> _saveProfilePicture(Student? student) async {
-final String? documentId = student?.studId;
+    final String? documentId = student?.studId;
     final urlDownload = await _uploadImage();
     print('urlDownload: $urlDownload');
     print('studentId: $documentId');
-    final studentRef = FirebaseFirestore.instance.collection('students').doc(documentId as String);
+    final studentRef = FirebaseFirestore.instance
+        .collection('students')
+        .doc(documentId as String);
 
     try {
       await FirebaseFirestore.instance.runTransaction((transaction) async {
         DocumentSnapshot studentSnapshot = await transaction.get(studentRef);
         if (studentSnapshot.exists) {
           await studentRef.update({'imageUrl': urlDownload});
-           // transaction.update(studentRef, {'imageUrl': urlDownload});
+          // transaction.update(studentRef, {'imageUrl': urlDownload});
         }
       });
       print('Update successful');
@@ -117,7 +118,6 @@ final String? documentId = student?.studId;
       print('Error updating image: $e');
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -152,20 +152,12 @@ final String? documentId = student?.studId;
                       height: 10,
                     ),
                     DrawerItems(
-                      name: 'Update Address',
-                      icon: Icons.location_city,
+                      name: 'Update Information',
+                      icon: Icons.update,
                       onPressed: () => onItemPressed(context, index: 1),
                     ),
                     const SizedBox(
                       height: 10,
-                    ),
-                    DrawerItems(
-                      name: 'Update Contact Number',
-                      icon: Icons.contact_phone_outlined,
-                      onPressed: () => onItemPressed(context, index: 2),
-                    ),
-                    const SizedBox(
-                      height: 20,
                     ),
                     const Divider(
                       thickness: 1,
@@ -185,7 +177,7 @@ final String? documentId = student?.studId;
                           if (!mounted) return;
                           Navigator.of(context).pushNamedAndRemoveUntil(
                             loginRoute,
-                                (_) => false,
+                            (_) => false,
                           );
                         }
                       },
@@ -226,94 +218,86 @@ final String? documentId = student?.studId;
     //'https://icon-library.com/images/default-profile-icon/default-profile-icon-6.jpg';
     return Column(
       children: [
-
         GestureDetector(
-        onTap: () {
-        _showPickImageDialog(context);
-    },
+          onTap: () {
+            _showPickImageDialog(context);
+          },
           child: Stack(
-           children: [
-            Container(
-              margin: const EdgeInsets.only(top: 20),
-              width: 120,
-              height: 120,
-              decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(100)),
-              color: Colors.green,
-            ),
-              child: ClipOval(
-    child: imageUrl != null
-    ? Image.file(
-    imageUrl!,
-    fit: BoxFit.cover,
-    width: double.infinity,
-    height: double.infinity,
-    )
-        : (imgUrl != null
-    ? Image.network(
-    imgUrl,
-    fit: BoxFit.cover,
-    width: double.infinity,
-    height: double.infinity,
-    )
-        : Center(
-    child: Icon(
-    Icons.person,
-    size: 50,
-    color: Colors.white,
-    ),
-    )
-    ),
-
-
-    ),
-      ),
-
-            Positioned(
-          bottom: 0,
-          right: 0,
-              child: Container(
-              width: 40,
-              height: 40,
-              decoration: const BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(top: 20),
+                width: 120,
+                height: 120,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(100)),
+                  color: Colors.green,
+                ),
+                child: ClipOval(
+                  child: imageUrl != null
+                      ? Image.file(
+                          imageUrl!,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: double.infinity,
+                        )
+                      : (imgUrl != null
+                          ? Image.network(
+                              imgUrl,
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: double.infinity,
+                            )
+                          : Center(
+                              child: Icon(
+                                Icons.person,
+                                size: 50,
+                                color: Colors.white,
+                              ),
+                            )),
+                ),
               ),
-                child: const Icon(Icons.camera_alt),
-          ),
-          ),
-          ],
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.camera_alt),
+                ),
+              ),
+            ],
           ),
         ),
-
         TextButton(
-          onPressed: (){
+          onPressed: () {
             _saveProfilePicture(student);
-        },
+          },
           child: const Text('Save Profile Picture'),
-    ),
-
-      const SizedBox(
-      width: 20,
-    ),
-      Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
+        ),
         const SizedBox(
-      height: 10,
-      ),
-        Text(
-      '$lName, $fName $mName',
-      style: const TextStyle(fontSize: 16, color: Colors.black),
-      ),
-        const SizedBox(
-      height: 10,
-      ),
-        Text(
-      email,
-      style: const TextStyle(fontSize: 16, color
-      : Colors.black),
-              ),
+          width: 20,
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              '$lName, $fName $mName',
+              style: const TextStyle(fontSize: 16, color: Colors.black),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              email,
+              style: const TextStyle(fontSize: 16, color: Colors.black),
+            ),
             const SizedBox(
               height: 10,
             ),
