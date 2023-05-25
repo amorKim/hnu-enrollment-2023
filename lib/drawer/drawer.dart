@@ -247,7 +247,7 @@ class _MyDrawerState extends State<MyDrawer> {
                               width: double.infinity,
                               height: double.infinity,
                             )
-                          : Center(
+                          : const Center(
                               child: Icon(
                                 Icons.person,
                                 size: 50,
