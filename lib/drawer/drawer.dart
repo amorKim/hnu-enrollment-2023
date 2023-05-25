@@ -1,7 +1,4 @@
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:hnu_mis_announcement/drawer/drawerItem.dart';
 import 'package:hnu_mis_announcement/drawer/myinfomation.dart';
@@ -13,7 +10,6 @@ import 'package:hnu_mis_announcement/services/cloud/firebase_cloud_storage.dart'
 import 'package:hnu_mis_announcement/services/cloud/student.dart';
 import 'package:hnu_mis_announcement/utilities/dialogs/logout_dialog.dart';
 import 'package:hnu_mis_announcement/views/constants/route.dart';
-import 'package:image_picker/image_picker.dart';
 
 class MyDrawer extends StatefulWidget {
   const MyDrawer({Key? key}) : super(key: key);
@@ -40,84 +36,6 @@ class _MyDrawerState extends State<MyDrawer> {
     email = user!.email;
   }
 
-  Future<void> _pickImage(ImageSource source) async {
-    final pickedFile = await ImagePicker().pickImage(source: source);
-
-    setState(() {
-      imageUrl = File(pickedFile!.path);
-    });
-  }
-
-  void _showPickImageDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Pick an image'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                GestureDetector(
-                  child: const Text('Pick from gallery'),
-                  onTap: () {
-                    _pickImage(ImageSource.gallery);
-                    Navigator.of(context).pop();
-                  },
-                ),
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                ),
-                GestureDetector(
-                  child: const Text('Take a picture'),
-                  onTap: () {
-                    _pickImage(ImageSource.camera);
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Future<String> _uploadImage() async {
-    final ref = FirebaseStorage.instance
-        .ref()
-        .child('students/${DateTime.now().millisecondsSinceEpoch}.jpg');
-
-    final task = ref.putFile(imageUrl!);
-
-    final snapshot = await task.whenComplete(() {});
-
-    final urlDownload = await snapshot.ref.getDownloadURL();
-
-    return urlDownload.toString();
-  }
-
-  Future<void> _saveProfilePicture(Student? student) async {
-    final String? documentId = student?.studId;
-    final urlDownload = await _uploadImage();
-    print('urlDownload: $urlDownload');
-    print('studentId: $documentId');
-    final studentRef = FirebaseFirestore.instance
-        .collection('students')
-        .doc(documentId as String);
-
-    try {
-      await FirebaseFirestore.instance.runTransaction((transaction) async {
-        DocumentSnapshot studentSnapshot = await transaction.get(studentRef);
-        if (studentSnapshot.exists) {
-          await studentRef.update({'imageUrl': urlDownload});
-          // transaction.update(studentRef, {'imageUrl': urlDownload});
-        }
-      });
-      print('Update successful');
-    } catch (e) {
-      print('Error updating image: $e');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -177,7 +95,7 @@ class _MyDrawerState extends State<MyDrawer> {
                           if (!mounted) return;
                           Navigator.of(context).pushNamedAndRemoveUntil(
                             loginRoute,
-                            (_) => false,
+                                (_) => false,
                           );
                         }
                       },
@@ -219,9 +137,6 @@ class _MyDrawerState extends State<MyDrawer> {
     return Column(
       children: [
         GestureDetector(
-          onTap: () {
-            _showPickImageDialog(context);
-          },
           child: Stack(
             children: [
               Container(
@@ -235,48 +150,29 @@ class _MyDrawerState extends State<MyDrawer> {
                 child: ClipOval(
                   child: imageUrl != null
                       ? Image.file(
-                          imageUrl!,
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                          height: double.infinity,
-                        )
+                    imageUrl!,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: double.infinity,
+                  )
                       : (imgUrl != null
-                          ? Image.network(
-                              imgUrl,
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              height: double.infinity,
-                            )
-                          : Center(
-                              child: Icon(
-                                Icons.person,
-                                size: 50,
-                                color: Colors.white,
-                              ),
-                            )),
-                ),
-              ),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(Icons.camera_alt),
+                      ? Image.network(
+                    imgUrl,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: double.infinity,
+                  )
+                      : const Center(
+                    child: Icon(
+                      Icons.person,
+                      size: 50,
+                      color: Colors.white,
+                    ),
+                  )),
                 ),
               ),
             ],
           ),
-        ),
-        TextButton(
-          onPressed: () {
-            _saveProfilePicture(student);
-          },
-          child: const Text('Save Profile Picture'),
         ),
         const SizedBox(
           width: 20,
