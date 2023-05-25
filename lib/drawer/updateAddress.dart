@@ -133,7 +133,7 @@ class _UpdateAddressState extends State<UpdateAddress> {
                             _selectedDate = newDate;
                             _dateBirth.text = _selectedDate != null
                                 ? DateFormat('MM/dd/yyyy')
-                                    .format(_selectedDate!)
+                                .format(_selectedDate!)
                                 : '';
                           });
                         }
