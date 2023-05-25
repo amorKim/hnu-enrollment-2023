@@ -29,6 +29,7 @@ class _AcademicsPageState extends State<AcademicsPage> {
           body: Column(
             children: [
               const TabBar(
+                indicatorColor: Colors.green,
                 tabs: [
                   Tab(
                     icon: Icon(
@@ -42,7 +43,7 @@ class _AcademicsPageState extends State<AcademicsPage> {
                   ),
                   Tab(
                     icon: Icon(
-                      Icons.grade,
+                      Icons.grade_outlined,
                       color: Colors.green,
                     ),
                     child: Text(
