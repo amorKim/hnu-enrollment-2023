@@ -25,28 +25,37 @@ class EnrolledCoursesListView extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         Expanded(
-          child: ListView.builder(
-            itemCount: enrollments.length,
-            itemBuilder: (context, index) {
-              final enrollment = enrollments.elementAt(index);
-              return ListTile(
-                title: Text(
-                  enrollment.courseCode,
-                  maxLines: 1,
-                  softWrap: true,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                trailing: IconButton(
-                  onPressed: () async {
-                    final shouldUnEnroll = await showUnEnrollDialog(context);
-                    if (shouldUnEnroll) {
-                      onUnEnroll(enrollment);
-                    }
+          child: Scrollbar(
+            thumbVisibility: true,
+            thickness: 10,
+            child: Scrollable(
+              viewportBuilder: (context, viewportOffset) {
+                return ListView.builder(
+                  itemCount: enrollments.length,
+                  itemBuilder: (context, index) {
+                    final enrollment = enrollments.elementAt(index);
+                    return ListTile(
+                      title: Text(
+                        enrollment.courseCode,
+                        maxLines: 1,
+                        softWrap: true,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      trailing: IconButton(
+                        onPressed: () async {
+                          final shouldUnEnroll = await showUnEnrollDialog(
+                              context);
+                          if (shouldUnEnroll) {
+                            onUnEnroll(enrollment);
+                          }
+                        },
+                        icon: const Icon(Icons.delete),
+                      ),
+                    );
                   },
-                  icon: const Icon(Icons.delete),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
       ],
