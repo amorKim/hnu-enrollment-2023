@@ -2,31 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:hnu_mis_announcement/services/auth/auth_service.dart';
 import 'package:hnu_mis_announcement/services/cloud/firebase_cloud_storage.dart';
 
-class Financial {
-  final String course;
-  final int loadunits;
-  final int payunits;
-  double get total => payunits * 752.0;
 
-  Financial({
-    required this.course,
-    required this.loadunits,
-    required this.payunits,
-  });
-}
+
 
 class FinancialsPage extends StatelessWidget {
   String get userId => AuthService.firebase().currentUser!.id;
-  final List<Financial> persons = [
-    Financial(course: 'CCS 106', loadunits: 3, payunits: 5),
-    Financial(course: 'IAS 101A', loadunits: 3, payunits: 5),
-    Financial(course: 'IS 101A', loadunits: 3, payunits: 3),
-    Financial(course: 'SE 102A', loadunits: 3, payunits: 5),
-    Financial(course: 'AL 102', loadunits: 3, payunits: 3),
-    Financial(course: 'LR 101', loadunits: 3, payunits: 3),
-    Financial(course: 'MATH 109', loadunits: 3, payunits: 3),
-    Financial(course: 'GEC RIZAL', loadunits: 3, payunits: 3),
-  ];
+
 
   FinancialsPage({super.key});
 
