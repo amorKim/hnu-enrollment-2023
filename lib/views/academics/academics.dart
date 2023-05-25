@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hnu_mis_announcement/services/auth/auth_service.dart';
 import 'package:hnu_mis_announcement/services/cloud/firebase_cloud_storage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:hnu_mis_announcement/services/cloud/cloud_storage_constants.dart';
 
 class AcademicsPage extends StatefulWidget {
   String get userId => AuthService.firebase().currentUser!.id;
@@ -10,12 +8,14 @@ class AcademicsPage extends StatefulWidget {
   const AcademicsPage({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _AcademicsPageState createState() => _AcademicsPageState();
 }
 
 class _AcademicsPageState extends State<AcademicsPage> {
   final FirebaseCloudStorage enrollmentService = FirebaseCloudStorage();
 
+  late double totalGrade;
   @override
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
@@ -28,7 +28,7 @@ class _AcademicsPageState extends State<AcademicsPage> {
         child: Scaffold(
           body: Column(
             children: [
-              TabBar(
+              const TabBar(
                 tabs: [
                   Tab(
                     icon: Icon(
@@ -80,27 +80,30 @@ class _AcademicsPageState extends State<AcademicsPage> {
                               }
                               // Handle the case when data is available
                               return DataTable(
-                                dataRowHeight: deviceHeight * 0.1,
-                                headingRowHeight: deviceHeight * 0.1,
-                                columnSpacing: deviceWidth * 0.12,
+                                dataRowHeight: deviceHeight * 0.09,
+                                headingRowHeight: deviceHeight * 0.08,
+                                columnSpacing: deviceWidth * 0.02,
                                 columns: const [
-                                  DataColumn(label: Text('Course Code')),
+                                  DataColumn(label: Text('Course \nName')),
                                   DataColumn(label: Text('Day')),
+                                  DataColumn(label: Text('Room')),
                                   DataColumn(label: Text('Time')),
-                                  DataColumn(label: Text('Room / Building')),
-                                  DataColumn(label: Text('Teacher')),
-                                  DataColumn(label: Text('Unit')),
                                 ],
                                 rows: [
-                                  ...?enrollments.data?.map((enrollment) {
-                                    return DataRow(cells: [
-                                      DataCell(Center(child: Text(enrollment.courseCode))),
-                                      DataCell(Center(child: Text(enrollment.))),
-                                      DataCell(Center(child: Text(enrollment.schedule))),
-                                      DataCell(Center(child: Text(enrollment.scheduleLab))),
-                                      DataCell(Center(child: Text(enrollment.))),
-                                    ]);
-                                  }),
+                                  ...?enrollments.data?.map((enrollment) => DataRow(cells: [
+                                    DataCell(Text(enrollment.courseCode)),
+                                    DataCell(Text(enrollment.schedule['days'])),
+                                    DataCell(Text(enrollment.schedule['room'])),
+                                    DataCell(Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Text(enrollment.schedule['start_time']),
+                                          Text(enrollment.schedule['end_time']),
+                                        ],
+                                      ),
+                                    ),
+                                  ])),
                                 ],
                               );
                             },
@@ -114,24 +117,95 @@ class _AcademicsPageState extends State<AcademicsPage> {
                         children: [
                           StreamBuilder(
                             stream: enrollmentService.allEnrollmentsOfStudent(userId: widget.userId),
-                            builder: (context, snapshot) {
-                              if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                            builder: (context, enrollments) {
+                              if (!enrollments.hasData || enrollments.data!.isEmpty) {
                                 return const Text(
                                   'No Enrollments yet',
                                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                                 );
+                              } else {
+                                totalGrade = enrollments.data!.toList().length * 2310.66;
+                                // Handle the case when data is available
+                                return DataTable(
+                                  dataRowHeight: deviceHeight * 0.09,
+                                  headingRowHeight: deviceHeight * 0.08,
+                                  columnSpacing: deviceWidth * 0.1,
+                                  columns: const [
+                                    DataColumn(label: Text('Credit Units')),
+                                    DataColumn(label: Text('Prelim')),
+                                    DataColumn(label: Text('Midterm')),
+                                    DataColumn(label: Text('Final')),
+                                  ],
+                                  rows: [
+                                    ...?enrollments.data?.map((enrollment) => DataRow(
+                                      cells: [
+                                        DataCell(Text(enrollment.studGrade ?? '0.0')),
+                                        DataCell(Text(enrollment.studGrade ?? '0.0')),
+                                        DataCell(Text(enrollment.studGrade ?? '0.0')),
+                                        DataCell(Text(enrollment.studGrade ?? '0.0')),
+                                      ],
+                                    )),
+                                  ],
+                                );
                               }
-                              // Handle the case when data is available
-                              return Container(); // Placeholder widget, replace with your desired content
                             },
                           ),
                         ],
                       ),
                     ),
                     // Prospectus Tab
-                    Container(
-                      child: Center(
-                        child: Text('Prospectus Tab Content'),
+                    SingleChildScrollView(
+                      child: DataTable(
+                        dataRowHeight: deviceHeight * 0.09,
+                        headingRowHeight: deviceHeight * 0.08,
+                        columnSpacing: deviceWidth * 0.1,
+                        columns: const [
+                          DataColumn(label: Text('Code')),
+                          DataColumn(label: Text('Descriptive Title')),
+                          DataColumn(label: Text('Units')),
+                        ],
+                        rows: const [
+                          DataRow(cells: [
+                            DataCell(Text('AL 102')),
+                            DataCell(Text('Automata Theory \nand Formal \nLanguages')),
+                            DataCell(Text('3.0')),
+                          ]),
+                          DataRow(cells: [
+                            DataCell(Text('CCS 106')),
+                            DataCell(Text('Application \nDevelopment \nand Emerging \nTechnologies')),
+                            DataCell(Text('3.0')),
+                          ]),
+                          DataRow(cells: [
+                            DataCell(Text('CCS ELEC')),
+                            DataCell(Text('Professional \nCS \nElective')),
+                            DataCell(Text('3.0')),
+                          ]),
+                          DataRow(cells: [
+                            DataCell(Text('GEC RIZAL')),
+                            DataCell(Text('Life and \nWorks of \nRizal')),
+                            DataCell(Text('3.0')),
+                          ]),
+                          DataRow(cells: [
+                            DataCell(Text('IAS 101A')),
+                            DataCell(Text('Information \nAssurance \nand Security 1')),
+                            DataCell(Text('3.0')),
+                          ]),
+                          DataRow(cells: [
+                            DataCell(Text('MATH 109')),
+                            DataCell(Text('Number Theory')),
+                            DataCell(Text('3.0')),
+                          ]),
+                          DataRow(cells: [
+                            DataCell(Text('PROF TRACK')),
+                            DataCell(Text('Professional \nTrack \nElective')),
+                            DataCell(Text('3.0')),
+                          ]),
+                          DataRow(cells: [
+                            DataCell(Text('SE 102A')),
+                            DataCell(Text('SE 102ASoftware \nEngineering 2')),
+                            DataCell(Text('3.0')),
+                          ]),
+                        ],
                       ),
                     ),
                   ],
